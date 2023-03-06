@@ -1,220 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>PaintGL</title>
-        <link href="https://unpkg.com/tailwindcss@^2.0/dist/tailwind.min.css" rel="stylesheet">
-        <style>
-            @layer utilities {
-                .scrollbar::-webkit-scrollbar {
-                    width: 20px;
-                    height: 10px;
-                }
 
-                .scrollbar::-webkit-scrollbar-track {
-                    border-radius: 100vh;
-                    background: #f7f4ed;
-                }
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Worksheet 1</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+    integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-                .scrollbar::-webkit-scrollbar-thumb {
-                    background: #000000;
-                    border-radius: 100vh;
-                    border: 3px solid #f6f7ed;
-                }
-
-                .scrollbar::-webkit-scrollbar-thumb:hover {
-                    background: #07006c;
-                }
-                }
-        </style>
-    </head>
-    <body>   
-        <nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 bg-gray-900">
-            <div class="container flex flex-wrap items-center justify-between mx-auto">
-                <a href="https://get.webgl.org/" class="flex items-center">
-                    <img src="./static/webgl.jpg" class="h-6 mr-3 sm:h-9" alt="Flowbite Logo" />
-                    <span class="self-center text-xl font-semibold whitespace-nowrap text-white">PaintGL</span>
-                </a>
-              <div class="w-full md:block md:w-auto" id="navbar-default">
-                <ul class="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white bg-gray-800 md:bg-gray-900 border-gray-700">
-                  <li>
-                    <button class="color-pick block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-500 md:p-0 text-white md:font-bold">Colors</button>
-                  </li>
-                  <li>
-                    <button class="shape-pick block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 text-white md:hover:text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent">Shapes</button>
-                  </li>
-                </ul>
-              </div>
+<body>
+  <div class="bg-pink-50 grid place-items-center min-h-screen w-full">
+    <div class="flex flex-col gap-2">
+      <div class="bg-white rounded-xl shadow-lg p-6 flex gap-6">
+        <canvas id="gl-canvas" width="512" height="512" class="rounded-xl"></canvas>
+        <div class="flex flex-col gap-4">
+          <!-- DRAWING TOOLS -->
+          <div>
+            <div class="uppercase text-gray-500 text-sm tracking-wider">tools</div>
+            <div class="hidden">
+              <input type="radio" name="tool" value="0" id="tool-line">
+              <input type="radio" name="tool" value="1" id="tool-triangle">
+              <input type="radio" name="tool" value="2" id="tool-rectangle">
+              <input type="radio" name="tool" value="3" id="tool-polygon">
             </div>
-        </nav>  
-
-        <div class="flex items-center justify-between flex-wrap bg-gray-800 p-6">
-            <div class="block lg:hidden">
-              <button class="navbar-toggler flex items-center px-3 py-2 border rounded text-gray-200 border-gray-400 hover:text-white hover:border-white focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50" onclick="toggleNavbar()">
-                <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-              </button>
+            <div id="tool-selection" class="flex gap-2 mt-2">
+              <label for="tool-line" title="Draw a line"
+                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90 ring-offset-2 ring-2 ring-pink-300">
+                <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px"
+                  viewBox="0 0 24 24" width="24px" fill="#000000">
+                  <g>
+                    <rect fill="none" fill-rule="evenodd" height="24" width="24" />
+                    <g>
+                      <rect fill-rule="evenodd" height="2" width="16" x="4" y="11" />
+                    </g>
+                  </g>
+                </svg>
+                </svg>
+              </label>
+              <label for="tool-triangle" title="Draw a triangle"
+                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
+                <svg stroke="currentColor" fill="none" stroke-width="3" viewBox="0 0 24 24" stroke-linecap="round"
+                  stroke-linejoin="round" height="18px" width="18px" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                  </path>
+                </svg>
+              </label>
+              <label for="tool-rectangle" title="Draw a rectangle"
+                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                  fill="currentColor">
+                  <path d="M0 0h24v24H0V0z" fill="none" />
+                  <path
+                    d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" />
+                </svg>
+              </label>
+              <label for="tool-polygon" title="Draw a polygon"
+                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+                  xmlns:svgjs="http://svgjs.dev/svgjs" viewBox="0 0 800 400">
+                  <path
+                    d="M277.77777099609375,61.34259033203125C279.65277099609375,61.34259033203125,557.1913513183594,59.72993611653646,559.0277709960938,61.34259033203125C560.8641906738281,62.95524454752604,555.7175744628906,301.68208068847656,553.24072265625,303.24072265625C550.7638708496094,304.79936462402344,188.79629618326823,296.16511993408204,187.5,295.1388854980469C186.20370381673177,294.1126510620117,358.2098754882812,150.87963129679363,358.7962951660156,149.30555725097656C359.38271484375,147.7314832051595,276.01850728352866,59.62963048299154,275.46295166015625,59.02777862548828"
+                    fill="none" stroke-width="50" stroke="hsl(0, 0%, 20%)" stroke-linecap="round"
+                    transform="matrix(1,0,0,1,26.545852661132812,18.771934509277344)"></path>
+                </svg>
+              </label>
             </div>
-            <div class="color-toggle overflow-x-auto">
-                <div class="navbar-links-2 hidden lg:flex lg:gap-3 lg:overflow-x-auto scrollbar">
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 rounded-l mb-2">Button 1</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                    <button class="navbar-button-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 rounded-r mb-2">Button 4</button>
-                </div>
-            </div>
-            <div class="shape-toggle overflow-x-auto hidden">
-                <div class="navbar-links hidden lg:flex lg:gap-3 lg:overflow-x-auto scrollbar">
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 rounded-l mb-2">Button 1</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 2</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 mb-2">Button 3</button>
-                <button class="navbar-button bg-gray-600 hover:bg-gray-700 active:bg-gray-700 text-white font-bold py-2 px-4 rounded-r mb-2">Button 4</button>
-                </div>
+            <div id="end-polygon" title="Finish drawing polygon and render"
+              class="hidden py-1 rounded-full cursor-pointer bg-gradient-to-br from-white to-pink-200 mt-2 text-center text-xs uppercase font-bold transition hover:brightness-90">
+              End Polygon
             </div>
           </div>
-          
-
-        <div>
-            <canvas id="gl-canvas" width="512" height="512"></canvas>
+          <!-- LINE SIZES -->
+          <div>
+            <div class="uppercase text-gray-500 text-sm tracking-wider">line size</div>
+            <div class="hidden">
+              <input type="radio" name="line-size" value="2" id="line-thin">
+              <input type="radio" name="line-size" value="6" id="line-medium">
+              <input type="radio" name="line-size" value="10" id="line-thicc">
+            </div>
+            <div id="line-selection" class="flex gap-2 mt-2">
+              <label for="line-thin" title="Default line width"
+                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90 ring-offset-2 ring-2 ring-pink-300">
+                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="14px"
+                  width="14px" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M5 12c0 3.859 3.14 7 7 7 3.859 0 7-3.141 7-7s-3.141-7-7-7c-3.86 0-7 3.141-7 7zm12 0c0 2.757-2.243 5-5 5s-5-2.243-5-5 2.243-5 5-5 5 2.243 5 5z">
+                  </path>
+                </svg>
+              </label>
+              <label for="line-medium" title="Semibold line width"
+                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
+                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="1em"
+                  width="1em" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12 2C6.486 2 2 6.486 2 12c.001 5.515 4.487 10.001 10 10.001 5.514 0 10-4.486 10.001-10.001 0-5.514-4.486-10-10.001-10zm0 18.001c-4.41 0-7.999-3.589-8-8.001 0-4.411 3.589-8 8-8 4.412 0 8.001 3.589 8.001 8-.001 4.412-3.59 8.001-8.001 8.001z">
+                  </path>
+                </svg>
+              </label>
+              <label for="line-thicc" title="Bold line width"
+                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
+                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="18px"
+                  width="18px" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z">
+                  </path>
+                </svg>
+              </label>
+            </div>
+          </div>
+          <!-- COLORS -->
+          <div>
+            <div class="uppercase text-gray-500 text-sm tracking-wider">colors</div>
+            <div class="hidden" id="colors">
+              <input id="light-salmon" type="radio" name="color" value="0">
+              <input id="purple" type="radio" name="color" value="1">
+              <input id="sky-blue" type="radio" name="color" value="2">
+              <input id="yellow" type="radio" name="color" value="3">
+              <input id="pink" type="radio" name="color" value="4">
+              <input id="light-green" type="radio" name="color" value="5">
+              <input id="salmon" type="radio" name="color" value="6">
+              <input id="violet" type="radio" name="color" value="7">
+              <input id="cream" type="radio" name="color" value="8">
+              <input id="forest-green" type="radio" name="color" value="9">
+              <input id="white" type="radio" name="color" value="10">
+              <input id="black" type="radio" name="color" value="11">
+            </div>
+            <div id="color-selection" class="grid grid-cols-6 grid-rows-2 gap-2 mt-2">
+              <label for="light-salmon" title="Light Salmon"
+                class="rounded-full cursor-pointer w-6 h-6 ring-offset-2 ring-2 ring-pink-300"
+                style="background: #ffc8bf;"></label>
+              <label for="salmon" title="Salmon" class="rounded-full cursor-pointer w-6 h-6"
+                style="background: #ff968a;"></label>
+              <label for="pink" title="Pink" class="rounded-full cursor-pointer w-6 h-6"
+                style="background: #e3b3ce;"></label>
+              <label for="cream" title="cream" class="rounded-full cursor-pointer w-6 h-6"
+                style="background: #e6d1c5;"></label>
+              <label for="yellow" title="Yellow" class="rounded-full cursor-pointer w-6 h-6"
+                style="background: #e0d6a6;"></label>
+              <label for="white" title="White" class="rounded-full cursor-pointer w-6 h-6"
+                style="background: #ededed"></label>
+              <label for="purple" title="Purple" class="rounded-full cursor-pointer w-6 h-6"
+                style="background: #cbaacb;"></label>
+              <label for="violet" title="Violet" class="rounded-full cursor-pointer w-6 h-6"
+                style="background: #beb3e6;"></label>
+              <label for="sky-blue" title="Sky Blue" class="rounded-full cursor-pointer w-6 h-6"
+                style="background: #afd4ed;"></label>
+              <label for="light-green" title="Light Green" class="rounded-full cursor-pointer w-6 h-6"
+                style="background: #bddbaf;"></label>
+              <label for="forest-green" title="Forest Green" class="rounded-full cursor-pointer w-6 h-6"
+                style="background: #95cfb5;"></label>
+              <label for="black" title="Black" class="rounded-full cursor-pointer w-6 h-6"
+                style="background: #1f1f1f;"></label>
+            </div>
+          </div>
+          <div class="flex-1 flex flex-col justify-end gap-2 text-center">
+            <div id="clear-canvas"
+              class="border border-red-500 text-red-500 px-6 py-2 rounded-full text-sm uppercase font-bold hover:bg-red-500 hover:text-white transition cursor-pointer">
+              Clear
+              Canvas</div>
+            <div id="spin-mode"
+              class="bg-gradient-to-br from-pink-400 to-pink-600 px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-white transition cursor-pointer">
+              Spin Mode</div>
+          </div>
         </div>
-        
-        <div>
-            <select id = "mymenu" size = "7">
-                <option value = "0">Black</option>
-                <option value = "1">Red</option>
-                <option value = "2">Yellow</option>
-                <option value = "3">Green</option>
-                <option value = "4">Blue</option>
-                <option value = "5">Magenta</option>
-                <option value = "6">Cyan</option>
-            </select>
-        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<footer class="hidden">
+  <script id="vertex-shader" type="x-shader/x-vertex">
+    #version 300 es
+    
+    in vec4 aPosition;
+    in vec4 aColor;
+    
+    out vec4 vColor;
 
-        <script>
-            var colorButton = document.querySelector('.color-pick');
-            var shapeButton = document.querySelector('.shape-pick');
-            var colorToggle = document.querySelector('.color-toggle');
-            var shapeToggle = document.querySelector('.shape-toggle');
-            colorButton.addEventListener('click', function() {
-                colorToggle.classList.remove('hidden');
-                shapeToggle.classList.add('hidden');
-                colorButton.classList.add('md:text-blue-500');
-                colorButton.classList.add('md:font-bold');
-                shapeButton.classList.remove('md:text-blue-500');
-                shapeButton.classList.remove('md:font-bold');
-            });
+    uniform float uTheta;
+    
+    void main() {
+      gl_Position = aPosition;
+      vColor = aColor;
 
-            shapeButton.addEventListener('click', function() {
-                colorToggle.classList.add('hidden');
-                shapeToggle.classList.remove('hidden');
-                colorButton.classList.remove('md:text-blue-500');
-                colorButton.classList.remove('md:font-bold');
-                shapeButton.classList.add('md:text-blue-500');
-                shapeButton.classList.add('md:font-bold');
-            });
-        </script>
-        
-        <script>
-            function toggleNavbar() {
-            var navbarLinks = document.querySelector('.navbar-links');
-            if (navbarLinks.classList.contains('hidden')) {
-                navbarLinks.classList.remove('hidden');
-            } else {
-                navbarLinks.classList.add('hidden');
-            }
-            }
-            
-            var navbarButtons = document.querySelectorAll('.navbar-button');
-            navbarButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
-                navbarButtons.forEach(function(otherButton) {
-                otherButton.classList.remove('bg-blue-600');
-                });
-                button.classList.add('bg-blue-600');
-            });
-            });
+      float s = sin(uTheta);
+      float c = cos(uTheta);
+    
+      gl_Position.x = -s*aPosition.y + c*aPosition.x;
+      gl_Position.y =  s*aPosition.x + c*aPosition.y;
+      gl_Position.z = 0.0;
+      gl_Position.w = 1.0;
+    }
+  </script>
 
-            var navbarButtonsColor = document.querySelectorAll('.navbar-button-2');
-            navbarButtonsColor.forEach(function(button) {
-            button.addEventListener('click', function() {
-                navbarButtonsColor.forEach(function(otherButton) {
-                otherButton.classList.remove('bg-green-600');
-                });
-                button.classList.add('bg-green-600');
-            });
-            });
-        </script>
-            
-        
-        <script id="vertex-shader" type="x-shader/x-vertex">
-            #version 300 es
-            
-            in vec4 aPosition;
-            in vec4 aColor;
-            
-            out vec4 vColor;
-            
-            void main()
-            {
-                gl_Position = aPosition;
-                vColor = aColor;
-            }
-        </script>
-        
-        <script id="fragment-shader" type="x-shader/x-fragment">
-            #version 300 es
-            
-            precision mediump float;
-            
-            in vec4 vColor;
-            out vec4 fColor;
-            
-            void main()
-            {
-                fColor = vColor;
-            }
-        </script>
-        
-        <script src="./Common/initShaders.js"></script>
-        <script src="./Common/MVnew.js"></script>
-        <script src="main.js"></script>
-        
-    </body>
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    #version 300 es
+    
+    precision mediump float;
+    
+    in vec4 vColor;
+    out vec4 fColor;
+    
+    void main() {
+      fColor = vColor;
+    }
+  </script>
+
+  <script src="./Common/initShaders.js"></script>
+  <script src="./Common/MVnew.js"></script>
+  <script src="./index.js"></script>
+  <script src="./line.js"></script>
+  <script src="./rectangle.js"></script>
+  <script src="./triangle.js"></script>
+  <script src="./polygon.js"></script>
+  <script src="./rotate.js"></script>
+</footer>
+
 </html>
