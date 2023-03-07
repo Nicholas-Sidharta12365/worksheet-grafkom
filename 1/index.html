@@ -9,17 +9,31 @@
   <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
     integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
-  <div class="bg-pink-50 grid place-items-center min-h-screen w-full">
+  <div class="bg-gradient-to-r from-[#1a1b26] to-[#24283b] grid place-items-center min-h-screen w-full">
+    
+  <nav class="bg-[#343b58] px-4 pt-4 pb-6 rounded-lg">
+    <div class="container flex flex-wrap items-center justify-between mx-auto">
+      <a href="https://get.webgl.org/" class="flex items-center">
+          <div class="h-8 w-8 border-[#7dcfff] border-4 mr-4">
+            <div class="h-8 w-8 border-[#7aa2f7] border-4 mr-4 mt-2 ml-3"></div>
+          </div>
+          <span class="self-center text-xl text-[#f7768e] font-semibold whitespace-nowrap ml-4">PaintGL</span>
+      </a>
+    </div>
+  </nav>
+
     <div class="flex flex-col gap-2">
-      <div class="bg-orange-200 rounded-xl shadow-lg p-6 flex gap-6">
+      <div class="bg-[#414868] rounded-xl shadow-lg p-6 flex gap-6">
         <canvas id="gl-canvas" width="512" height="512" class="rounded-xl"></canvas>
         <div class="flex flex-col gap-4">
           <!-- DRAWING TOOLS -->
           <div>
-            <div class="uppercase text-gray-500 text-sm tracking-wider">tools</div>
+            <div class="uppercase text-[#73daca] text-sm tracking-wider font-bold">shapes</div>
+            <hr class="my-2">
             <div class="hidden">
               <input type="radio" name="tool" value="0" id="tool-line">
               <input type="radio" name="tool" value="1" id="tool-triangle">
@@ -75,7 +89,8 @@
           </div>
           <!-- LINE SIZES -->
           <div>
-            <div class="uppercase text-gray-500 text-sm tracking-wider">line size</div>
+            <div class="uppercase text-[#73daca] text-sm tracking-wider font-bold">line size</div>
+            <hr class="mt-2">
             <div class="hidden">
               <input type="radio" name="line-size" value="2" id="line-thin">
               <input type="radio" name="line-size" value="6" id="line-medium">
@@ -113,7 +128,8 @@
           </div>
           <!-- COLORS -->
           <div>
-            <div class="uppercase text-gray-500 text-sm tracking-wider">colors</div>
+            <div class="uppercase text-[#73daca] text-sm tracking-wider font-bold">Colors</div>
+            <hr class="mt-2">
             <div class="hidden" id="colors">
               <input id="light-salmon" type="radio" name="color" value="0">
               <input id="purple" type="radio" name="color" value="1">
@@ -161,13 +177,15 @@
               class="border border-red-500 text-red-500 px-6 py-2 rounded-full text-sm uppercase font-bold hover:bg-red-500 hover:text-white transition cursor-pointer">
               Clear
               Canvas</div>
-            <div id="spin-mode"
-              class="bg-gradient-to-br from-red-400 to-blue-600 px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-white transition cursor-pointer">
-              Spin Mode</div>
+            <div id="spin-mode">
+              <button class="spin">
+                Spin Object
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      <div class="text-orange-300 text-center">Made with inspiration by Joshua, Nicholas, and Hizbast</div>
+      <div class="text-[#2ac3de] text-center">Made with inspiration by Joshua, Nicholas, and Hizbast</div>
     </div>
   </div>
 </body>

@@ -41,7 +41,7 @@ $(document).ready(function () {
   if (!gl) alert("WebGL 2.0 isn't available");
 
   gl.viewport(0, 0, canvas.width, canvas.height);
-  gl.clearColor(1, 0.94, 0.94, 1.0);
+  gl.clearColor(0.337, 0.373, 0.537, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
 
@@ -138,16 +138,10 @@ function connectListeners() {
       if (!spin) {
         spin = true
 
-        const btn = document.getElementById("spin-mode");
-        btn.innerText = "Stop Spin"
-
         spin_mode()
       }
       else {
         spin = false
-
-        const btn = document.getElementById("spin-mode");
-        btn.innerText = "Spin Mode"
 
         stop_spin_mode()
         render()
