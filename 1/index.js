@@ -92,22 +92,22 @@ function render() {
 function connectListeners() {
   /* Change color */
   $("input[name=color]").change(function () {
-    $("#color-selection label").removeClass("ring-offset-2 ring-2 ring-pink-300")
+    $("#color-selection label").removeClass("ring-offset-2 ring-2 ring-purple-300")
 
     const selected = $('input[name=color]:checked')
     const label = $(`label[for=${selected.attr('id')}]`)
-    label.addClass("ring-offset-2 ring-2 ring-pink-300")
+    label.addClass("ring-offset-2 ring-2 ring-purple-300")
     cIndex = parseInt(selected.val())
   })
 
   /* Change tool/shape */
   $("input[name=tool]").change(function () {
     $("#end-polygon").hide()
-    $("#tool-selection label").removeClass("ring-offset-2 ring-2 ring-pink-300")
+    $("#tool-selection label").removeClass("ring-offset-2 ring-2 ring-blue-300")
 
     const selected = $('input[name=tool]:checked')
     const label = $(`label[for=${selected.attr('id')}]`)
-    label.addClass("ring-offset-2 ring-2 ring-pink-300")
+    label.addClass("ring-offset-2 ring-2 ring-blue-300")
     selectedTool = parseInt(selected.val())
 
     if (selectedTool == 3) $("#end-polygon").show()
@@ -115,11 +115,11 @@ function connectListeners() {
 
   /* Change line size */
   $('input[name="line-size"]').change(function () {
-    $("#line-selection label").removeClass("ring-offset-2 ring-2 ring-pink-300")
+    $("#line-selection label").removeClass("ring-offset-2 ring-2 ring-red-300")
 
     const selected = $('input[name="line-size"]:checked')
     const label = $(`label[for=${selected.attr('id')}]`)
-    label.addClass("ring-offset-2 ring-2 ring-pink-300")
+    label.addClass("ring-offset-2 ring-2 ring-red-300")
     lineWidth = parseInt(selected.val())
   })
 

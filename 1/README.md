@@ -3,7 +3,7 @@
 # Pembagian Task
 1. Joshua Mihai Daniel Nadeak
 - Give ideas for UI
-- Centering Div For UI and Color Pallete
+- Centering Div and fixes For UI and Color Pallete
 -
 
 
