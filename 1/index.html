@@ -14,7 +14,7 @@
 <body>
   <div class="bg-pink-50 grid place-items-center min-h-screen w-full">
     <div class="flex flex-col gap-2">
-      <div class="bg-white rounded-xl shadow-lg p-6 flex gap-6">
+      <div class="bg-orange-200 rounded-xl shadow-lg p-6 flex gap-6">
         <canvas id="gl-canvas" width="512" height="512" class="rounded-xl"></canvas>
         <div class="flex flex-col gap-4">
           <!-- DRAWING TOOLS -->
@@ -28,7 +28,7 @@
             </div>
             <div id="tool-selection" class="flex gap-2 mt-2">
               <label for="tool-line" title="Draw a line"
-                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90 ring-offset-2 ring-2 ring-pink-300">
+                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-yellow-200 transition hover:brightness-90 ring-offset-2 ring-2 ring-pink-300">
                 <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px"
                   viewBox="0 0 24 24" width="24px" fill="#000000">
                   <g>
@@ -41,7 +41,7 @@
                 </svg>
               </label>
               <label for="tool-triangle" title="Draw a triangle"
-                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
+                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-yellow-200 transition hover:brightness-90">
                 <svg stroke="currentColor" fill="none" stroke-width="3" viewBox="0 0 24 24" stroke-linecap="round"
                   stroke-linejoin="round" height="18px" width="18px" xmlns="http://www.w3.org/2000/svg">
                   <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
@@ -49,7 +49,7 @@
                 </svg>
               </label>
               <label for="tool-rectangle" title="Draw a rectangle"
-                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
+                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-yellow-200 transition hover:brightness-90">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
                   fill="currentColor">
                   <path d="M0 0h24v24H0V0z" fill="none" />
@@ -58,7 +58,7 @@
                 </svg>
               </label>
               <label for="tool-polygon" title="Draw a polygon"
-                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
+                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-yellow-200 transition hover:brightness-90">
                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
                   xmlns:svgjs="http://svgjs.dev/svgjs" viewBox="0 0 800 400">
                   <path
@@ -69,7 +69,7 @@
               </label>
             </div>
             <div id="end-polygon" title="Finish drawing polygon and render"
-              class="hidden py-1 rounded-full cursor-pointer bg-gradient-to-br from-white to-pink-200 mt-2 text-center text-xs uppercase font-bold transition hover:brightness-90">
+              class="hidden py-1 rounded-full cursor-pointer bg-gradient-to-br from-white to-yellow-200 mt-2 text-center text-xs uppercase font-bold transition hover:brightness-90">
               End Polygon
             </div>
           </div>
@@ -83,7 +83,7 @@
             </div>
             <div id="line-selection" class="flex gap-2 mt-2">
               <label for="line-thin" title="Default line width"
-                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90 ring-offset-2 ring-2 ring-pink-300">
+                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-yellow-200 transition hover:brightness-90 ring-offset-2 ring-2 ring-pink-300">
                 <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="14px"
                   width="14px" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -92,7 +92,7 @@
                 </svg>
               </label>
               <label for="line-medium" title="Semibold line width"
-                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
+                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-yellow-200 transition hover:brightness-90">
                 <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="1em"
                   width="1em" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -101,7 +101,7 @@
                 </svg>
               </label>
               <label for="line-thicc" title="Bold line width"
-                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
+                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-yellow-200 transition hover:brightness-90">
                 <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="18px"
                   width="18px" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -137,9 +137,9 @@
               <label for="pink" title="Pink" class="rounded-full cursor-pointer w-6 h-6"
                 style="background: #e3b3ce;"></label>
               <label for="cream" title="cream" class="rounded-full cursor-pointer w-6 h-6"
-                style="background: #e6d1c5;"></label>
+                style="background: #ddc1b1;"></label>
               <label for="yellow" title="Yellow" class="rounded-full cursor-pointer w-6 h-6"
-                style="background: #e0d6a6;"></label>
+                style="background: #f0dd80;"></label>
               <label for="white" title="White" class="rounded-full cursor-pointer w-6 h-6"
                 style="background: #ededed"></label>
               <label for="purple" title="Purple" class="rounded-full cursor-pointer w-6 h-6"
@@ -162,7 +162,7 @@
               Clear
               Canvas</div>
             <div id="spin-mode"
-              class="bg-gradient-to-br from-pink-400 to-pink-600 px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-white transition cursor-pointer">
+              class="bg-gradient-to-br from-pink-400 to-yellow-600 px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-white transition cursor-pointer">
               Spin Mode</div>
           </div>
         </div>
