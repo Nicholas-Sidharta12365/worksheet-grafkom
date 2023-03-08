@@ -83,7 +83,8 @@ function render() {
     /* Draws vertices according to object type. */
     if (object.type == 'line') gl.drawArrays(gl.LINES, object.start, 2)
     else if (object.type == 'triangle') gl.drawArrays(gl.TRIANGLE_STRIP, object.start, 3);
-    else if (object.type == 'rectangle') gl.drawArrays(gl.TRIANGLE_STRIP, object.start, 4);
+    else if (object.type == 'pentagon') gl.drawArrays(gl.TRIANGLE_FAN, object.start, 5);
+    else if (object.type == 'rectangle') gl.drawArrays(gl.TRIANGLE_FAN, object.start, 4);
     else if (object.type == 'parallelogram') gl.drawArrays(gl.TRIANGLE_FAN, object.start, 5);
     else if (object.type == 'polygon') gl.drawArrays(gl.TRIANGLE_FAN, object.start, object.vertexCount);
   }
@@ -164,5 +165,6 @@ function connectListeners() {
     else if (selectedTool == 2) drawRectangle(e)
     else if (selectedTool == 3) drawPolygon(e)
     else if (selectedTool == 4) drawParallelogram(e)
+    else if (selectedTool == 5) drawPentagon(e)
   })
 }

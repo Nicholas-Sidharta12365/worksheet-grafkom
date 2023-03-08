@@ -40,6 +40,7 @@
               <input type="radio" name="tool" value="2" id="tool-rectangle">
               <input type="radio" name="tool" value="3" id="tool-polygon">
               <input type="radio" name="tool" value="4" id="tool-parallelogram">
+              <input type="radio" name="tool" value="5" id="tool-pentagon">
             </div>
             <div id="tool-selection" class="flex gap-2 mt-2">
               <label for="tool-line" title="Draw a line"
@@ -83,6 +84,14 @@
                 </svg>
               </label>
               <label for="tool-parallelogram" title="Draw a parallelogram"
+                class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-yellow-200">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                  fill="currentColor">
+                  <path d="M0 0h24v24H0V0z" fill="none" />
+                  <path d="M4 4h16v16H4V4z M6 6l6 2v8l-6-2V6z M14 8l6 2v8l-6-2V8z" />
+                </svg>
+              </label>
+              <label for="tool-pentagon" title="Draw a pentagon"
                 class="rounded-full cursor-pointer w-9 h-9 grid place-items-center bg-gradient-to-br from-white to-yellow-200">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
                   fill="currentColor">
@@ -211,6 +220,7 @@
   <script src="./polygon.js"></script>
   <script src="./rotate.js"></script>
   <script src="./parallelogram.js"></script>
+  <script src="./pentagon.js"></script>
 </footer>
 
 </html>
