@@ -83,7 +83,8 @@ function render() {
     /* Draws vertices according to object type. */
     if (object.type == 'line') gl.drawArrays(gl.LINES, object.start, 2)
     else if (object.type == 'triangle') gl.drawArrays(gl.TRIANGLE_STRIP, object.start, 3);
-    else if (object.type == 'rectangle') gl.drawArrays(gl.TRIANGLE_FAN, object.start, 4);
+    else if (object.type == 'rectangle') gl.drawArrays(gl.TRIANGLE_STRIP, object.start, 4);
+    else if (object.type == 'parallelogram') gl.drawArrays(gl.TRIANGLE_FAN, object.start, 5);
     else if (object.type == 'polygon') gl.drawArrays(gl.TRIANGLE_FAN, object.start, object.vertexCount);
   }
   requestAnimationFrame(render);
@@ -113,16 +114,6 @@ function connectListeners() {
     if (selectedTool == 3) $("#end-polygon").show()
   })
 
-  /* Change line size */
-  $('input[name="line-size"]').change(function () {
-    $("#line-selection label").removeClass("ring-offset-2 ring-2 ring-red-300")
-
-    const selected = $('input[name="line-size"]:checked')
-    const label = $(`label[for=${selected.attr('id')}]`)
-    label.addClass("ring-offset-2 ring-2 ring-red-300")
-    lineWidth = parseInt(selected.val())
-  })
-
   /* End polygon */
   $("#end-polygon").click(() => endPolygon())
 
@@ -133,7 +124,7 @@ function connectListeners() {
   })
 
   /* Spin mode */
-  $('#spin-mode').click(() => {
+  $('#spin-mode-1').click(() => {
     if (objects.length >= 1) {
       if (!spin) {
         spin = true
@@ -149,11 +140,29 @@ function connectListeners() {
     }
   })
 
+    /* Spin mode */
+    $('#spin-mode-2').click(() => {
+      if (objects.length >= 1) {
+        if (!spin) {
+          spin = true
+  
+          spin_clockwise_mode()
+        }
+        else {
+          spin = false
+  
+          stop_spin_mode()
+          render()
+        }
+      }
+    })
+
   /* Update rendering strategy */
   canvas.addEventListener('mousedown', function (e) {
     if (selectedTool == 0) drawLine(e)
     else if (selectedTool == 1) drawTriangle(e)
     else if (selectedTool == 2) drawRectangle(e)
     else if (selectedTool == 3) drawPolygon(e)
+    else if (selectedTool == 4) drawParallelogram(e)
   })
 }
