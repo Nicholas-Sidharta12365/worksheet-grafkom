@@ -14,7 +14,7 @@
 - Created triangle and rectangle shape
 - Created the spin clockwise option
 
-3. Hizkia Sebasian Ginting
+3. Hizkia Sebastian Ginting
 - Help design the UI
 - Checking if UI works well
 - Created parallelogram and pentagon shape
