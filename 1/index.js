@@ -1,3 +1,5 @@
+// Main Javascript To Handle All The Stuff Needed
+
 var canvas;
 var gl;
 

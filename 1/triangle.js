@@ -1,3 +1,5 @@
+// Method To Create A Triangle
+
 "use strict";
 
 var firstTriangle = true;

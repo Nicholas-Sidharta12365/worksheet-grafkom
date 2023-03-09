@@ -1,3 +1,5 @@
+// Method To Create A Rectangle
+
 "use strict";
 
 var firstRectangle = true

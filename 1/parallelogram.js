@@ -1,3 +1,5 @@
+// Method To Create A Parallelogram
+
 "use strict";
 
 var firstParallelogram = true;

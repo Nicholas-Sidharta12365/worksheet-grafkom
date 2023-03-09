@@ -1,3 +1,5 @@
+// Method To Do Rotation
+
 let animation, animationTimeout
 let CIRCLE = 360
 let deltaTheta = 0.05

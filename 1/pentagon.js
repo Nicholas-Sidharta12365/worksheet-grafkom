@@ -1,3 +1,5 @@
+// Method To Create A Pentagon
+
 "use strict";
 
 var firstPentagon = true;

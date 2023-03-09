@@ -3,3 +3,5 @@
 1. Joshua Mihai Daniel Nadeak
 2. Nicholas Sidharta
 3. Hizkia Sebasian Ginting
+
+### Description on tasks is inside the '1' Folder
