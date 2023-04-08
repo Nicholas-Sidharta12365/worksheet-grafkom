@@ -40,7 +40,7 @@ window.onload = function init() {
   //  Configure WebGL
   //
   gl.viewport(0, 0, canvas.width, canvas.height);
-  gl.clearColor(1, 0.94, 0.94, 1.0);
+  gl.clearColor(0, 0, 0, 1.0);
 
   //  Load shaders and initialize attribute buffers
   var program = initShaders(gl, "vertex-shader", "fragment-shader");
@@ -153,7 +153,7 @@ function drawletterG() {
   //matrix = m3.multiply(matrix, moveOriginMatrix);
 
   //set color
-  gl.uniform4f(colorUniformLocation, 1.0, 0.588, 0.541, 1.0);
+  gl.uniform4f(colorUniformLocation, 0.3765, 1, 0, 1.0);
 
   // Set the matrix.
   gl.uniformMatrix3fv(matrixLocation, false, matrix);
@@ -191,7 +191,7 @@ function drawletterL() {
   //matrix = m3.multiply(matrix, moveOriginMatrix);
 
   //set color
-  gl.uniform4f(colorUniformLocation, 0.686, 0.831, 0.929, 1.0);
+  gl.uniform4f(colorUniformLocation, 0.4353, 0.7804, 0.9882, 1.0);
 
   // Set the matrix.
   gl.uniformMatrix3fv(matrixLocation, false, matrix);
@@ -201,7 +201,7 @@ function drawletterL() {
 }
 
 function drawobject3() {
-  count = 12; //number of vertices 
+  count = 6; //number of vertices 
 
   setGeometry(gl, 3);
 
@@ -227,7 +227,7 @@ function drawobject3() {
   //matrix = m3.multiply(matrix, moveOriginMatrix);
 
   //set color
-  gl.uniform4f(colorUniformLocation,0.741, 0.859, 0.686, 1.0);
+  gl.uniform4f(colorUniformLocation,1, 0.9647, 0.2196, 1.0);
 
   // Set the matrix.
   gl.uniformMatrix3fv(matrixLocation, false, matrix);
@@ -321,11 +321,11 @@ function setGeometry(gl, shape) {
         gl.ARRAY_BUFFER,
         new Float32Array([
           // left column
-          100, 0,
-          150, 0,
+          40, 0,
+          110, 0,
           0, 150,
           0, 150,
-          150, 0,
+          110, 0,
           150, 150,
 
         ]),
@@ -337,8 +337,8 @@ function setGeometry(gl, shape) {
         gl.ARRAY_BUFFER,
         new Float32Array([
           // left column
-          0, 0,
-          150, 0,
+          30, 0,
+          180, 0,
 
         ]),
         gl.STATIC_DRAW);
@@ -349,19 +349,12 @@ function setGeometry(gl, shape) {
         gl.ARRAY_BUFFER,
         new Float32Array([
           // left column
-          0,0,
-          -150, -100,
-          -100, -150,
-          0, -150,
-          -150, 0,
-          -150, -150,
-          0,0,
-          150, 100,
-          100, 150,
-          0, 150,
-          150, 0,
-          150, 150,
-
+          60, 0,
+          110, 0,
+          110, 100,
+          60, 0,
+          60, 100,
+          110, 100,
         ]),
         gl.STATIC_DRAW);
 

@@ -1,90 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>001 - Animasi/game primitif</title>
+    <link rel="stylesheet" href="./1.css" />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+      integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>01 | Primitive Game</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
-    integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body>
-  <div class="bg-pink-50 grid place-items-center min-h-screen w-full">
-    <div class="flex flex-col gap-2">
-      <div class="bg-white rounded-xl shadow-lg p-6 flex gap-6">
-        <canvas id="gl-canvas" width="512" height="512" class="rounded-xl"></canvas>
-        <div class="flex flex-col gap-4">
-          <div class="uppercase text-gray-500 text-sm tracking-wider">square</div>
-          <div class="flex-1 flex flex-col gap-2 text-center">
-            <div id="speed-sq"
-              class="bg-gradient-to-br from-pink-400 to-pink-600 px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-white transition cursor-pointer">
-              Increase speed</div>
-            <div id="dec-sq"
-              class="bg-gradient-to-br from-pink-400 to-pink-600 px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-white transition cursor-pointer">
-              Decrease speed</div>
-          </div>
-          <div class="uppercase text-gray-500 text-sm tracking-wider">triangle</div>
-          <div class="flex-1 flex flex-col gap-2 text-center">
-            <div id="speed-tr"
-              class="bg-gradient-to-br from-pink-400 to-pink-600 px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-white transition cursor-pointer">
-              Increase speed</div>
-            <div id="dec-tr"
-              class="bg-gradient-to-br from-pink-400 to-pink-600 px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-white transition cursor-pointer">
-              Decrease speed</div>
-          </div>
-          <div class="uppercase text-gray-500 text-sm tracking-wider">polygon</div>
-          <div class="flex-1 flex flex-col gap-2 text-center">
-            <div id="speed-3"
-              class="bg-gradient-to-br from-pink-400 to-pink-600 px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-white transition cursor-pointer">
-              Increase speed</div>
-            <div id="dec-3"
-              class="bg-gradient-to-br from-pink-400 to-pink-600 px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-white transition cursor-pointer">
-              Decrease speed</div>
+  <body>
+    <div class="bg-[#343b58] grid place-items-center min-h-screen w-full">
+      <div class="flex flex-col gap-2">
+        <div class="bg-[#414868] rounded-xl shadow-lg p-6 flex gap-6">
+          <canvas
+            id="gl-canvas"
+            width="512"
+            height="512"
+            class="rounded-xl"
+          ></canvas>
+          <div class="flex flex-col gap-4">
+            <div class="uppercase text-[#37ff8b] font-bold text-sm tracking-wider">
+              Trapezoid
+            </div>
+            <div class="flex-1 flex flex-col gap-2 text-center">
+              <div
+                id="speed-sq"
+                class="bg-gradient-to-r from-gray-900 to-gray-600 bg-gradient-to-r px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-purple-300 transition cursor-pointer"
+              >
+                Increase speed
+              </div>
+              <div
+                id="dec-sq"
+                class="bg-gradient-to-r from-gray-900 to-gray-600 bg-gradient-to-r px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-purple-300 transition cursor-pointer"
+              >
+                Decrease speed
+              </div>
+            </div>
+            <div class="uppercase text-[#37ff8b] font-bold text-sm tracking-wider">
+              triangle
+            </div>
+            <div class="flex-1 flex flex-col gap-2 text-center">
+              <div
+                id="speed-tr"
+                class="bg-gradient-to-r from-gray-900 to-gray-600 bg-gradient-to-r px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-purple-300 transition cursor-pointer"
+              >
+                Increase speed
+              </div>
+              <div
+                id="dec-tr"
+                class="bg-gradient-to-r from-gray-900 to-gray-600 bg-gradient-to-r px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-purple-300 transition cursor-pointer"
+              >
+                Decrease speed
+              </div>
+            </div>
+            <div class="uppercase text-[#37ff8b] font-bold text-sm tracking-wider">
+              Rectangle
+            </div>
+            <div class="flex-1 flex flex-col gap-2 text-center">
+              <div
+                id="speed-3"
+                class="bg-gradient-to-r from-gray-900 to-gray-600 bg-gradient-to-r px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-purple-300 transition cursor-pointer"
+              >
+                Increase speed
+              </div>
+              <div
+                id="dec-3"
+                class="bg-gradient-to-r from-gray-900 to-gray-600 bg-gradient-to-r px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-purple-300 transition cursor-pointer"
+              >
+                Decrease speed
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <a class="text-pink-500 underline hover:text-pink-400 text-center" href="./index.html">Back to Home</a>
+      <a href="./index.html">
+        <button data-text="Awesome" class="button">
+          <span class="actual-text">&nbsp;Home&nbsp;</span>
+          <span class="hover-text" aria-hidden="true">&nbsp;Home&nbsp;</span>
+        </button>
+      </a>
     </div>
-  </div>
-</body>
+  </body>
 
-<script id="vertex-shader" type="x-shader/x-vertex">
-  #version 300 es
+  <script id="vertex-shader" type="x-shader/x-vertex">
+    #version 300 es
 
-  in vec2 vPosition;
-  
-  uniform mat3 u_matrix;
-  
-  
-  void
-  main()
-  {
-    // Multiply the position by the matrix.
-    gl_Position = vec4((u_matrix * vec3(vPosition, 1)).xy, 0, 1);
-  
-  }
-</script>
+    in vec2 vPosition;
 
-<script id="fragment-shader" type="x-shader/x-fragment">
-  #version 300 es
+    uniform mat3 u_matrix;
 
-  precision mediump float;
-  
-  out vec4 FragColor;
-  uniform vec4 u_color;
-  
-  void
-  main()
-  {
-      FragColor = u_color;
-  }
-</script>
 
-<script src="./Common/initShaders.js"></script>
-<script src="./Common/MVnew.js"></script>
-<script src="./1/1.js"></script>
+    void
+    main()
+    {
+      // Multiply the position by the matrix.
+      gl_Position = vec4((u_matrix * vec3(vPosition, 1)).xy, 0, 1);
 
+    }
+  </script>
+
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    #version 300 es
+
+    precision mediump float;
+
+    out vec4 FragColor;
+    uniform vec4 u_color;
+
+    void
+    main()
+    {
+        FragColor = u_color;
+    }
+  </script>
+
+  <script src="./Common/initShaders.js"></script>
+  <script src="./Common/MVnew.js"></script>
+  <script src="./1/1.js"></script>
 </html>
