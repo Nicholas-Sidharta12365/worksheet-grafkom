@@ -8,6 +8,9 @@ var thetaLoc;
 var speed = 100;
 var direction = true;
 
+var bufferId;
+var bufferIdTriangle;
+
 init();
 
 function init() {
@@ -27,19 +30,30 @@ function init() {
   var program = initShaders(gl, "vertex-shader", "fragment-shader");
   gl.useProgram(program);
 
-  var vertices = [
-    vec2(0, 1),
-    vec2(-1, 0),
-    vec2(1, 0),
-    vec2(0, -1)
+  var verticeSquare = [  
+    vec2(0, 0.2),  
+    vec2(0.2, 0),  
+    vec2(0, -0.2),  
+    vec2(-0.2, 0),
   ];
 
 
   // Load the data into the GPU
-
-  var bufferId = gl.createBuffer();
+  bufferId= gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, bufferId);
-  gl.bufferData(gl.ARRAY_BUFFER, flatten(vertices), gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, flatten(verticeSquare), gl.STATIC_DRAW);
+
+  var verticeTriangle = [
+    vec2(0.3, 0.5),
+    vec2(-0.3, 0.5),
+    vec2(0.0, 0.0),
+  ];
+
+
+  // Load the data into the GPU
+  bufferIdTriangle= gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, bufferIdTriangle);
+  gl.bufferData(gl.ARRAY_BUFFER, flatten(verticeTriangle), gl.STATIC_DRAW);
 
   // Associate out shader variables with our data buffer
 
@@ -101,7 +115,13 @@ function render() {
   theta += (direction ? 0.1 : -0.1);
   gl.uniform1f(thetaLoc, theta);
 
+  gl.bindBuffer(gl.ARRAY_BUFFER, bufferId);
+
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, bufferIdTriangle);
+
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 3);
 
   setTimeout(
     function () { requestAnimationFrame(render); },
