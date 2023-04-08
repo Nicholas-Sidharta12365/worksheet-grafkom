@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02 | Midpointline</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+  <div class="bg-pink-50 grid place-items-center min-h-screen w-full">
+    <div class="flex flex-col gap-2">
+      <div class="bg-white rounded-xl shadow-lg p-6 flex gap-6">
+        <canvas id="gl-canvas" width="512" height="512" class="rounded-xl"> </canvas>
+        <div class="flex flex-col gap-3">
+          <div class="uppercase text-gray-500 text-sm tracking-wider">midpoint settings</div>
+          <div id="settings" class="flex flex-col gap-2">
+            <text>Input First Point</text>
+
+            <div class="">
+              <label for="xA">xA</label>
+              <input style="width: 75px;" class="rounded-full border px-4 py-1" type="number" id="xA" name="xA">
+  
+              <label for="yA">yA</label>
+              <input style="width: 75px;" class="rounded-full border px-4 py-1" type="number" id="yA" name="yA"> <br>
+            </div>
+
+            <text>Input Second Point</text>
+
+            <div class="">
+              <label for="xB">xB</label>
+              <input style="width: 75px;" class="rounded-full border px-4 py-1" type="number" id="xB" name="xB">
+  
+              <label for="yB">yB</label>
+              <input style="width: 75px;" class="rounded-full border px-4 py-1" type="number" id="yB" name="yB"> <br>
+            </div> <br>
+
+            <button class="rounded-full cursor-pointer px-4 py-1 bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90 ring-offset-2 ring-2 ring-pink-300" id="confirm">
+              Confirm Start and End Point</button> <br>
+          </div>
+        </div>
+      </div>
+      <a class="text-pink-500 underline hover:text-pink-400 text-center" href="./index.html">Back to Home</a>
+    </div>
+  </div>
+</body>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+  #version 300 es
+  
+  in vec4 aPosition;
+  in vec4 aColor;
+  
+  out vec4 vColor;
+
+  uniform float uTheta;
+  
+  void main() {
+    gl_Position = aPosition;
+    vColor = aColor;
+
+    float s = sin(uTheta);
+    float c = cos(uTheta);
+  
+    gl_Position.x = -s*aPosition.y + c*aPosition.x;
+    gl_Position.y =  s*aPosition.x + c*aPosition.y;
+    gl_Position.z = 0.0;
+    gl_Position.w = 1.0;
+  }
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+  #version 300 es
+  
+  precision mediump float;
+  
+  in vec4 vColor;
+  out vec4 fColor;
+  
+  void main() {
+    fColor = vColor;
+  }
+</script>
+
+<script src="./Common/initShaders.js"></script>
+<script src="./Common/MVnew.js"></script>
+<script src="./02/2.js"></script>
+
+</html>

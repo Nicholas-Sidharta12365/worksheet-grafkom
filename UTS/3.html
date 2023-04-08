@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03 | H20</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+  <div class="bg-pink-50 grid place-items-center min-h-screen w-full">
+    <div class="flex flex-col gap-2">
+      <div class="bg-white rounded-xl shadow-lg p-6 flex gap-6">
+        <canvas id="gl-canvas" width="512" height="512" class="rounded-xl"> </canvas>
+        <div class="flex flex-col gap-3">
+          <div class="uppercase text-gray-500 text-sm tracking-wider">camera view</div>
+          <!-- CAMERA OPTIONS -->
+          <div class="hidden">
+            <input type="radio" name="camera" value="0" id="cam-default">
+            <input type="radio" name="camera" value="1" id="cam-oxygen">
+            <input type="radio" name="camera" value="2" id="cam-blue">
+            <input type="radio" name="camera" value="3" id="cam-red">
+          </div>
+          <div id="cam-select" class="flex flex-col gap-2">
+            <label for="cam-default"
+              class="rounded-full cursor-pointer px-4 py-1 bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90 ring-offset-2 ring-2 ring-pink-300">
+              🎥 Default Camera</label>
+            <label for="cam-oxygen"
+              class="rounded-full cursor-pointer px-4 py-1 bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
+              🟢 Oxygen Cam</label>
+            <label for="cam-red"
+              class="rounded-full cursor-pointer px-4 py-1 bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
+              🔵 Blue Hydrogen Cam</label>
+            <label for="cam-blue"
+              class="rounded-full cursor-pointer px-4 py-1 bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
+              🔴 Red Hydrogen Cam</label>
+          </div>
+        </div>
+      </div>
+      <a class="text-pink-500 underline hover:text-pink-400 text-center" href="./index.html">Back to Home</a>
+    </div>
+  </div>
+  <script id="vertex-shader-3d" type="x-shader/x-vertex">
+        attribute vec4 a_position;
+        attribute vec4 a_color;
+        
+        uniform mat4 u_matrix;
+        
+        varying vec4 v_color;
+        
+        void main() {
+          // Multiply the position by the matrix.
+          gl_Position = u_matrix * a_position;
+        
+          // Pass the color to the fragment shader.
+          v_color = a_color;
+        }
+        </script>
+  <!-- fragment shader -->
+  <script id="fragment-shader-3d" type="x-shader/x-fragment">
+        precision mediump float;
+        
+        // Passed in from the vertex shader.
+        varying vec4 v_color;
+        
+        uniform vec4 u_colorMult;
+        
+        void main() {
+           gl_FragColor = v_color * u_colorMult;
+        }
+        </script>
+  <script src="./Common/initShaders.js"></script>
+  <script src="./Common/MVnew.js"></script>
+  <script src="https://webglfundamentals.org/webgl/resources/webgl-utils.js"></script>
+  <script src="https://webglfundamentals.org/webgl/resources/m4.js"></script>
+  <script src="https://webglfundamentals.org/webgl/resources/primitives.js"></script>
+  <script src="./03/3.js"></script>
+  <script src="./03/camera.js"></script>
+</body>
+
+</html>
