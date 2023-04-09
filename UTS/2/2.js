@@ -69,27 +69,6 @@ window.onload = function init() {
 
 }
 
-// Initialize Buffer
-function initvBuffer() {
-    index = 0;
-    midpoints = [];
-    vBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, 8*maxNumPositions, gl.STATIC_DRAW);
-
-    positionLoc = gl.getAttribLocation(program, "aPosition");
-    gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(positionLoc);
-
-    cBuffer = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
-    gl.bufferData( gl.ARRAY_BUFFER, 16*maxNumPositions, gl.STATIC_DRAW );
-
-    colorLoc = gl.getAttribLocation(program, "aColor");
-    gl.vertexAttribPointer(colorLoc, 4, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(colorLoc);
-}
-
 //Usable from line with degree of 45 to 90.
 //leftmost point first --> then rightmost.
 
@@ -146,6 +125,26 @@ function mplx(x1,y1,x2,y2) {
     }
 }
 
+// Initialize Buffer
+function initvBuffer() {
+    index = 0;
+    midpoints = [];
+    vBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, 8*maxNumPositions, gl.STATIC_DRAW);
+
+    positionLoc = gl.getAttribLocation(program, "aPosition");
+    gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(positionLoc);
+
+    cBuffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, 16*maxNumPositions, gl.STATIC_DRAW );
+
+    colorLoc = gl.getAttribLocation(program, "aColor");
+    gl.vertexAttribPointer(colorLoc, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(colorLoc);
+}
 
 function draw() {
     // load data to buffer
@@ -159,6 +158,7 @@ function draw() {
         gl.bufferSubData(gl.ARRAY_BUFFER, 16*index, flatten(t));
         index++;
     }
+    // Draw Arrays
     gl.clear(gl.COLOR_BUFFER_BIT);
     for (var i = 0; i<index; i++)
         gl.drawArrays(gl.POINTS, 0, index);
