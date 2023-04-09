@@ -1,48 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>02 | Midpointline</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>002 - Implementasi Algoritma MidPoint Line</title>
+    <link rel="stylesheet" href="./1.css" />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+      integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
 <body>
-  <div class="bg-pink-50 grid place-items-center min-h-screen w-full">
+  <nav class="bg-cyan-900 border-gray-200 dark:bg-gray-900">
+    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <a href="#" class="flex items-center">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/WebGL_Logo.svg/2560px-WebGL_Logo.svg.png" class="h-8 mr-3" alt="Flowbite Logo" />
+        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">MIDPOINT LINE</span>
+    </a>
+    <div class="flex md:order-2">
+        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" id = "confirm">Make the MidPoint Line</button>
+    </div>
+    </div>
+  </nav>
+  <div class="bg-[#343b58] grid place-items-center min-h-screen w-full">
     <div class="flex flex-col gap-2">
-      <div class="bg-white rounded-xl shadow-lg p-6 flex gap-6">
-        <canvas id="gl-canvas" width="512" height="512" class="rounded-xl"> </canvas>
+      <div class="bg-[#414868] rounded-xl shadow-lg p-6 flex gap-6">
+        <canvas
+          id="gl-canvas"
+          width="400"
+          height="400"
+        ></canvas>
         <div class="flex flex-col gap-3">
-          <div class="uppercase text-gray-500 text-sm tracking-wider">midpoint settings</div>
+          <div class="uppercase text-gray-300 text-sm tracking-wider">Point Settings</div>
           <div id="settings" class="flex flex-col gap-2">
-            <text>Input First Point</text>
+            <b>Start Point</b>
 
             <div class="">
-              <label for="xA">xA</label>
-              <input style="width: 75px;" class="rounded-full border px-4 py-1" type="number" id="xA" name="xA">
+              <label for="x1">x1</label>
+              <input style="width: 100px;" class="rounded-full border px-4 py-1" type="number" id="x1" name="x1">
   
-              <label for="yA">yA</label>
-              <input style="width: 75px;" class="rounded-full border px-4 py-1" type="number" id="yA" name="yA"> <br>
+              <label for="y1">y1</label>
+              <input style="width: 100px;" class="rounded-full border px-4 py-1" type="number" id="y1" name="y1"> <br>
             </div>
 
-            <text>Input Second Point</text>
+            <text>End Point</text>
 
             <div class="">
-              <label for="xB">xB</label>
-              <input style="width: 75px;" class="rounded-full border px-4 py-1" type="number" id="xB" name="xB">
+              <label for="x2">x2</label>
+              <input style="width: 100px;" class="rounded-full border px-4 py-1" type="number" id="x2" name="x2">
   
-              <label for="yB">yB</label>
-              <input style="width: 75px;" class="rounded-full border px-4 py-1" type="number" id="yB" name="yB"> <br>
+              <label for="y2">y2</label>
+              <input style="width: 100px;" class="rounded-full border px-4 py-1" type="number" id="y2" name="y2"> <br>
             </div> <br>
-
-            <button class="rounded-full cursor-pointer px-4 py-1 bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90 ring-offset-2 ring-2 ring-pink-300" id="confirm">
-              Confirm Start and End Point</button> <br>
           </div>
         </div>
       </div>
-      <a class="text-pink-500 underline hover:text-pink-400 text-center" href="./index.html">Back to Home</a>
+
+      <a href="./index.html">
+        <button data-text="Awesome" class="button">
+          <span class="actual-text">&nbsp;Home&nbsp;</span>
+          <span class="hover-text" aria-hidden="true">&nbsp;Home&nbsp;</span>
+        </button>
+      </a>
     </div>
   </div>
 </body>
@@ -86,6 +108,6 @@
 
 <script src="./Common/initShaders.js"></script>
 <script src="./Common/MVnew.js"></script>
-<script src="./02/2.js"></script>
+<script src="./2/2.js"></script>
 
 </html>
