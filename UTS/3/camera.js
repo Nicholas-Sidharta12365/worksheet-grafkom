@@ -1,5 +1,6 @@
 "use strict";
 
+// Function to run the whole program on creating the hydrogens and oxygen
 function main() {
 	// Get A WebGL context
 	/** @type {HTMLCanvasElement} */
@@ -14,27 +15,26 @@ function main() {
 	// and gl.bufferData
 	const oxygenBufferInfo = primitives.createSphereWithVertexColorsBufferInfo(gl, 20, 12, 10);
 	const hydrogenBufferInfo = primitives.createSphereWithVertexColorsBufferInfo(gl, 10, 12, 6);
-	const hhydrogenBufferInfo = primitives.createSphereWithVertexColorsBufferInfo(gl, 10, 12, 6);
+	const hydrogen2BufferInfo = primitives.createSphereWithVertexColorsBufferInfo(gl, 10, 12, 6);
 
 	// setup GLSL program
 	var programInfo = webglUtils.createProgramInfo(gl, ["vertex-shader-3d", "fragment-shader-3d"]);
-
 	var fieldOfViewRadians = radians(60);
 	var cameraPov = 0;
 
 	// Uniforms for each object.
 	var orbit = (radius) => vec3(radius, radius, 0);
 	var oxygenUniforms = {
-		u_colorMult: [94 / 255, 234 / 255, 212 / 255, 1],
+		u_colorMult: [72 / 255, 61 / 255, 139 / 255, 1],
 		u_matrix: m4.identity(),
 	};
 	var hydrogenUniforms = {
-		u_colorMult: [251 / 255, 113 / 255, 133 / 255, 1],
+		u_colorMult: [128/255, 0/255, 0/255, 1],
 		u_matrix: m4.identity(),
 
 	};
-	var hhydrogenUniforms = {
-		u_colorMult: [56 / 255, 189 / 255, 248 / 255, 1],
+	var hydrogen2Uniforms = {
+		u_colorMult: [0 / 255, 49 / 255, 83 / 255, 1],
 		u_matrix: m4.identity(),
 	};
 	var oxygenTranslation = [0, 0, 0];
@@ -50,7 +50,7 @@ function main() {
 		}
 	}
 	var hydrogenTranslation = mult(hydrogen.red.orbitRadius, clockPosition(hydrogen.red.oclock));
-	var hhydrogenTranslation = mult(hydrogen.blue.orbitRadius, clockPosition(hydrogen.blue.oclock));
+	var hydrogen2Translation = mult(hydrogen.blue.orbitRadius, clockPosition(hydrogen.blue.oclock));
 
 	var objectsToDraw = [
 		{
@@ -65,11 +65,12 @@ function main() {
 		},
 		{
 			programInfo: programInfo,
-			bufferInfo: hhydrogenBufferInfo,
-			uniforms: hhydrogenUniforms,
+			bufferInfo: hydrogen2BufferInfo,
+			uniforms: hydrogen2Uniforms,
 		},
 	];
 
+	// Top compute the matrix given, by translating
 	function computeMatrix(viewProjectionMatrix, translation, xRotation, yRotation) {
 		var matrix = m4.translate(viewProjectionMatrix,
 			translation[0],
@@ -89,7 +90,7 @@ function main() {
 
 		// Tell WebGL how to convert from clip space to pixels
 		gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-		gl.clearColor(1, 0.94, 0.94, 1.0);
+		gl.clearColor(0, 0, 0, 1.0);
 
 		gl.enable(gl.CULL_FACE);
 		gl.enable(gl.DEPTH_TEST);
@@ -116,7 +117,7 @@ function main() {
 				break;
 			case 3:
 				// blue hydrogen cam
-				var cameraPosition = hhydrogenTranslation;
+				var cameraPosition = hydrogen2Translation;
 				var target = [0, 0, 0];
 				break;
 
@@ -139,7 +140,7 @@ function main() {
 		var YRotation = 2 * time;
 
 		hydrogenTranslation = revolveClock(hydrogen.red.orbit, 200 * time, hydrogen.red.oclock)
-		hhydrogenTranslation = revolveClock(hydrogen.blue.orbit, 200 * time, hydrogen.blue.oclock)
+		hydrogen2Translation = revolveClock(hydrogen.blue.orbit, 200 * time, hydrogen.blue.oclock)
 
 		// console.log(radians(200 * time) % Math.PI, (radians(200 * time) % Math.PI) < 0.01);
 		if (radians(200 * time) % (2 * Math.PI) < 0.03) {
@@ -161,9 +162,9 @@ function main() {
 			XRotation,
 			YRotation);
 
-		hhydrogenUniforms.u_matrix = computeMatrix(
+		hydrogen2Uniforms.u_matrix = computeMatrix(
 			viewProjectionMatrix,
-			hhydrogenTranslation,
+			hydrogen2Translation,
 			XRotation,
 			YRotation);
 
@@ -193,10 +194,10 @@ function main() {
 		document.querySelectorAll("#cam-select label").forEach(label => label.classList.remove("ring-offset-2", "ring-2", "ring-pink-300"))
 		const selected = document.querySelector('input[name="camera"]:checked')
 		const label = document.querySelector(`label[for=${selected.id}]`)
-		console.log("🚀 ~ file: shadedSphere3.js ~ line 196 ~ document.querySelector ~ selected.id", selected.id)
+		console.log("file: shadedSphere3.js ~ line 196 ~ document.querySelector ~ selected.id", selected.id)
 		label.classList.add("ring-offset-2", "ring-2", "ring-pink-300")
 		cameraPov = parseInt(selected.value)
-		console.log("🚀 ~ file: shadedSphere3.js ~ line 198 ~ document.querySelector ~ cameraPov", cameraPov)
+		console.log("file: shadedSphere3.js ~ line 198 ~ document.querySelector ~ cameraPov", cameraPov)
 	}
 	Array.prototype.forEach.call(camSelect, function (radio) {
 		radio.addEventListener('change', camChangeHandler);

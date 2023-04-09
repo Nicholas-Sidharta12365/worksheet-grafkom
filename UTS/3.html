@@ -1,21 +1,36 @@
 <!DOCTYPE html>
 <html>
 
+<!-- DEFINING THE HEAD -->
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>03 | H20</title>
+  <title>003 - H2O and its camera</title>
+  <link rel="stylesheet" href="./1.css" />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+      integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+      crossorigin="anonymous"
+    ></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
+<!-- DEFINING THE BODY -->
 <body>
-  <div class="bg-pink-50 grid place-items-center min-h-screen w-full">
-    <div class="flex flex-col gap-2">
-      <div class="bg-white rounded-xl shadow-lg p-6 flex gap-6">
-        <canvas id="gl-canvas" width="512" height="512" class="rounded-xl"> </canvas>
-        <div class="flex flex-col gap-3">
-          <div class="uppercase text-gray-500 text-sm tracking-wider">camera view</div>
+  <div class="bg-[#343b58] grid place-items-center min-h-screen w-full">
+      <div class="flex flex-col gap-2">
+        <div class="bg-[#414868] rounded-xl shadow-lg p-6 flex gap-6">
+          <canvas
+            id="gl-canvas"
+            width="512"
+            height="512"
+            class="rounded-xl"
+          ></canvas>
+          <div class="flex flex-col gap-4">
+          <div class="uppercase text-[#37ff8b] font-bold text-sm tracking-wider">
+            Camera View
+          </div>
           <!-- CAMERA OPTIONS -->
           <div class="hidden">
             <input type="radio" name="camera" value="0" id="cam-default">
@@ -25,22 +40,27 @@
           </div>
           <div id="cam-select" class="flex flex-col gap-2">
             <label for="cam-default"
-              class="rounded-full cursor-pointer px-4 py-1 bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90 ring-offset-2 ring-2 ring-pink-300">
+              class="bg-gradient-to-r from-gray-900 to-gray-600 bg-gradient-to-r px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-purple-300 transition cursor-pointer">
               🎥 Default Camera</label>
             <label for="cam-oxygen"
-              class="rounded-full cursor-pointer px-4 py-1 bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
-              🟢 Oxygen Cam</label>
+              class="bg-gradient-to-r from-gray-900 to-gray-600 bg-gradient-to-r px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-purple-300 transition cursor-pointer">
+              🟣 Oxygen - Cam</label>
             <label for="cam-red"
-              class="rounded-full cursor-pointer px-4 py-1 bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
-              🔵 Blue Hydrogen Cam</label>
+              class="bg-gradient-to-r from-gray-900 to-gray-600 bg-gradient-to-r px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-purple-300 transition cursor-pointer">
+              🔵 Hydrogen One - Cam</label>
             <label for="cam-blue"
-              class="rounded-full cursor-pointer px-4 py-1 bg-gradient-to-br from-white to-pink-200 transition hover:brightness-90">
-              🔴 Red Hydrogen Cam</label>
+              class="bg-gradient-to-r from-gray-900 to-gray-600 bg-gradient-to-r px-6 py-2 rounded-full text-sm uppercase font-bold hover:brightness-110 text-purple-300 transition cursor-pointer">
+              🔴 Hydrogen Two - Cam</label>
           </div>
         </div>
       </div>
-      <a class="text-pink-500 underline hover:text-pink-400 text-center" href="./index.html">Back to Home</a>
     </div>
+    <a href="./index.html">
+      <button data-text="Awesome" class="button">
+        <span class="actual-text">&nbsp;Home&nbsp;</span>
+        <span class="hover-text" aria-hidden="true">&nbsp;Home&nbsp;</span>
+      </button>
+    </a>
   </div>
   <script id="vertex-shader-3d" type="x-shader/x-vertex">
         attribute vec4 a_position;
@@ -76,8 +96,8 @@
   <script src="https://webglfundamentals.org/webgl/resources/webgl-utils.js"></script>
   <script src="https://webglfundamentals.org/webgl/resources/m4.js"></script>
   <script src="https://webglfundamentals.org/webgl/resources/primitives.js"></script>
-  <script src="./03/3.js"></script>
-  <script src="./03/camera.js"></script>
+  <script src="./3/3.js"></script>
+  <script src="./3/camera.js"></script>
 </body>
 
 </html>
