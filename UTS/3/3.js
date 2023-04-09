@@ -7,7 +7,7 @@ const revolveClock = (v, deg, oclock) => {
   const c = cos(deg), s = sin(deg), oneMinCos = (1 - c);
 
   // rotate vector around arbitrary axis
-  // rotation matrix gotten from https://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
+  // Source for rotation matrix https://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
   const R = mat3(
     c + u[0] * u[0] * oneMinCos,
     u[0] * u[1] * oneMinCos - u[2] * s,
