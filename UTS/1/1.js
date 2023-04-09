@@ -148,9 +148,6 @@ function drawletterG() {
       matrix = m3.multiply(matrix, rotationMatrix);
     }
   }
-  //matrix = m3.multiply(matrix, rotationMatrix);
-  //matrix = m3.multiply(matrix, scaleMatrix);
-  //matrix = m3.multiply(matrix, moveOriginMatrix);
 
   //set color
   gl.uniform4f(colorUniformLocation, 0.3765, 1, 0, 1.0);
@@ -160,8 +157,6 @@ function drawletterG() {
 
   //gl.clear( gl.COLOR_BUFFER_BIT );
   gl.drawArrays(primitiveType, offset, count);
-
-
 }
 
 function drawletterL() {
@@ -187,8 +182,6 @@ function drawletterL() {
       matrix = m3.multiply(matrix, rotationMatrix);
     }
   }
-  //matrix = m3.multiply(matrix, scaleMatrix);
-  //matrix = m3.multiply(matrix, moveOriginMatrix);
 
   //set color
   gl.uniform4f(colorUniformLocation, 0.4353, 0.7804, 0.9882, 1.0);
@@ -222,9 +215,6 @@ function drawobject3() {
       matrix = m3.multiply(matrix, rotationMatrix);
     }
   }
-  //matrix = m3.multiply(matrix, rotationMatrix);
-  //matrix = m3.multiply(matrix, scaleMatrix);
-  //matrix = m3.multiply(matrix, moveOriginMatrix);
 
   //set color
   gl.uniform4f(colorUniformLocation,1, 0.9647, 0.2196, 1.0);
