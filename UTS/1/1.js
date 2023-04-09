@@ -1,5 +1,7 @@
+// Use strict mode to enforce stricter syntax rules and prevent common mistakes.
 "use strict";
 
+// Declare global variables for the canvas, WebGL context, and other settings.
 var canvas;
 var gl;
 
@@ -12,16 +14,16 @@ var speed2 = 0;
 var speed3 = 0;
 
 var colorUniformLocation;
-var translation = [200, 200]; //top-left of rectangle
+var translation = [200, 200]; // Top-left corner of rectangle
 var angle = 0;
 var angleInRadians = 0;
-var scale = [1.0, 1.0]; //default scale
+var scale = [1.0, 1.0]; // Default scale
 var matrix;
 var matrixLocation;
 var translationMatrix;
 var rotationMatrix;
 var scaleMatrix;
-var moveOriginMatrix; //move origin to 'center' of the letter as center of rotation
+var moveOriginMatrix; // Move origin to the center of the letter as the center of rotation
 var projectionMatrix;
 
 var movement = 1;
@@ -30,146 +32,175 @@ var scalefactor = 0.005;
 var currentscale = 0.005;
 var middlewidth = 0;
 
+// Wait for the window to finish loading before initializing the program.
 window.onload = function init() {
+  // Get a reference to the canvas element and WebGL context.
   canvas = document.getElementById("gl-canvas");
-
-  gl = canvas.getContext('webgl2');
+  gl = canvas.getContext("webgl2");
   if (!gl) alert("WebGL 2.0 isn't available");
 
-  //
-  //  Configure WebGL
-  //
+  // Set the viewport size and background color.
   gl.viewport(0, 0, canvas.width, canvas.height);
   gl.clearColor(0, 0, 0, 1.0);
 
-  //  Load shaders and initialize attribute buffers
+  // Load the shaders and initialize attribute buffers.
   var program = initShaders(gl, "vertex-shader", "fragment-shader");
   gl.useProgram(program);
 
-  // Load the data into the GPU
+  // Create a buffer object for the rectangle data.
   var letterbuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, letterbuffer);
 
+  // Specify the vertex data for the rectangle.
+  // TODO: Add code to fill the buffer with vertex data.
 
-  // Associate out shader variables with our data buffer
+  // Associate our shader variables with the vertex buffer.
   var vPosition = gl.getAttribLocation(program, "vPosition");
   gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(vPosition);
 
+  // Get references to the uniform variables in the shaders.
   colorUniformLocation = gl.getUniformLocation(program, "u_color");
-
   matrixLocation = gl.getUniformLocation(program, "u_matrix");
+
+  // Set the middle width of the canvas for use in the rendering function.
   middlewidth = Math.floor(gl.canvas.width / 2);
 
+  // Set up event listeners for buttons to control movement, rotation, and scaling.
   document.getElementById("speed-sq").onclick = function (event) {
     speed1 += 1;
   };
-
   document.getElementById("dec-sq").onclick = function (event) {
     speed1 -= 1;
   };
-
   document.getElementById("speed-tr").onclick = function (event) {
     speed2 += 1;
   };
-
   document.getElementById("dec-tr").onclick = function (event) {
     speed2 -= 1;
   };
-
   document.getElementById("speed-3").onclick = function (event) {
     speed3 += 1;
   };
-
   document.getElementById("dec-3").onclick = function (event) {
     speed3 -= 1;
   };
 
+  // Set the default primitive type and render the rectangle.
   primitiveType = gl.TRIANGLES;
-  render(); //default render
-}
+  render();
+};
 
+// The main rendering function
 function render() {
+  // Update the current position and scale of the objects
   currentposition += movement;
   currentscale += scalefactor;
 
+  // Make the objects bounce off the sides of the screen
   if (currentposition > middlewidth) {
     currentposition = middlewidth;
     movement = -movement;
-
-  };
+  }
   if (currentposition < 0) {
     currentposition = 0;
     movement = -movement;
-  };
+  }
 
+  // Limit the maximum and minimum scaling of the objects
   if (currentscale > 2) {
     currentscale = 2.0;
     scalefactor = -scalefactor;
-  };
-
+  }
   if (currentscale < 0.005) {
     currentscale = 0.005;
     scalefactor = -scalefactor;
-  };
+  }
 
+  // Increment the rotation angle of the objects
   angle += 1.0;
 
+  // Clear the screen and draw the objects
   gl.clear(gl.COLOR_BUFFER_BIT);
-
-  drawletterG();
-  drawletterL();
+  drawObject1();
+  drawObject2();
   drawobject3();
 
-  requestAnimationFrame(render); //refresh
-
+  // Request the next animation frame to update the screen
+  requestAnimationFrame(render);
 }
 
-function drawletterG() {
-  count = 6; //number of vertices 
-  translation = [middlewidth - 130, gl.canvas.height / 2 - 90];
+// Draw the first object
+function drawObject1() {
+  count = 6; // Number of vertices in the geometry
+  translation = [middlewidth - 130, gl.canvas.height / 2 - 90]; // Translation vector for the object
 
-  angleInRadians = 360 - (angle * Math.PI / 180); //rotating counter clockwise
+  angleInRadians = 360 - (angle * Math.PI) / 180; // Rotation angle in radians
 
-  setGeometry(gl, 1);
+  setGeometry(gl, 1); // Set the geometry of the object
 
-  matrix = m3.identity();
+  matrix = m3.identity(); // Initialize the transformation matrix
 
-  projectionMatrix = m3.projection(gl.canvas.width, gl.canvas.height);
-  translationMatrix = m3.translation(translation[0] - currentposition, translation[1]);
-  rotationMatrix = m3.rotation(angleInRadians);
-  scaleMatrix = m3.scaling(scale[0] + currentscale, scale[1] + currentscale);
-  moveOriginMatrix = m3.translation(-65, -90);
+  projectionMatrix = m3.projection(gl.canvas.width, gl.canvas.height); // Create the projection matrix
+  translationMatrix = m3.translation(
+    translation[0] - currentposition,
+    translation[1]
+  ); // Create the translation matrix
+  rotationMatrix = m3.rotation(angleInRadians); // Create the rotation matrix
+  scaleMatrix = m3.scaling(scale[0] + currentscale, scale[1] + currentscale); // Create the scaling matrix
+  moveOriginMatrix = m3.translation(-65, -90); // Create the matrix to move the origin to the center of the object
 
-  // Multiply the matrices.
+  // Multiply the matrices to create the final transformation matrix
   matrix = m3.multiply(projectionMatrix, rotationMatrix);
   if (speed1 > 0) {
     for (let i = 0; i < speed1; i++) {
       matrix = m3.multiply(matrix, rotationMatrix);
     }
   }
+  matrix = m3.multiply(matrix, translationMatrix);
+  matrix = m3.multiply(matrix, moveOriginMatrix);
+  matrix = m3.multiply(matrix, scaleMatrix);
 
-  //set color
+  // Set the color of the object
   gl.uniform4f(colorUniformLocation, 0.3765, 1, 0, 1.0);
 
-  // Set the matrix.
+  // Set the transformation matrix as a uniform variable in the shader program
   gl.uniformMatrix3fv(matrixLocation, false, matrix);
 
-  //gl.clear( gl.COLOR_BUFFER_BIT );
+  // Draw the object using the WebGL context
   gl.drawArrays(primitiveType, offset, count);
 }
 
-function drawletterL() {
-  count = 4; //number of vertices 
+/**
+ * Draws the second object on the canvas.
+ *
+ * @function
+ * @name drawObject2
+ * @return {void}
+ */
+function drawObject2() {
+  count = 4; // number of vertices in the object
 
+  // Set the geometry.
   setGeometry(gl, 2);
 
+  // Set the translation values for the object.
   translation = [middlewidth + 100, gl.canvas.height / 2 - 90];
 
-  angleInRadians = 180 - (angle * Math.PI / 180); //rotating counter clockwise
+  // Calculate the angle in radians for the rotation of the object.
+  angleInRadians = 180 - (angle * Math.PI) / 180; // rotating counter clockwise
+
+  // Create an identity matrix.
   matrix = m3.identity();
+
+  // Create a projection matrix and a translation matrix for the object.
   projectionMatrix = m3.projection(gl.canvas.width, gl.canvas.height);
-  translationMatrix = m3.translation(translation[0] + currentposition, translation[1]);
+  translationMatrix = m3.translation(
+    translation[0] + currentposition,
+    translation[1]
+  );
+
+  // Create a rotation matrix, a scaling matrix, and a matrix to move the origin.
   rotationMatrix = m3.rotation(angleInRadians);
   scaleMatrix = m3.scaling(scale[0] + currentscale, scale[1] + currentscale);
   moveOriginMatrix = m3.translation(-50, -90);
@@ -177,33 +208,45 @@ function drawletterL() {
   // Multiply the matrices.
   matrix = m3.multiply(projectionMatrix, rotationMatrix);
   matrix = m3.multiply(matrix, rotationMatrix);
+
+  // If the speed of the object is greater than 0, rotate the object multiple times.
   if (speed2 > 0) {
     for (let i = 0; i < speed2; i++) {
       matrix = m3.multiply(matrix, rotationMatrix);
     }
   }
 
-  //set color
+  // Set the color of the object.
   gl.uniform4f(colorUniformLocation, 0.4353, 0.7804, 0.9882, 1.0);
 
-  // Set the matrix.
+  // Set the matrix uniform.
   gl.uniformMatrix3fv(matrixLocation, false, matrix);
 
-  //gl.clear( gl.COLOR_BUFFER_BIT );
+  // Draw the object.
   gl.drawArrays(primitiveType, offset, count);
 }
 
+// This function draws a 2D object using WebGL.
 function drawobject3() {
-  count = 6; //number of vertices 
+  // Set the number of vertices.
+  count = 18;
 
+  // Set the geometry.
   setGeometry(gl, 3);
 
+  // Set the translation.
   translation = [middlewidth + 100, gl.canvas.height / 2 - 90];
 
-  angleInRadians = (angle * Math.PI / 180); //rotating counter clockwise
+  // Set the angle of rotation.
+  angleInRadians = (angle * Math.PI) / 180; //rotating counter clockwise
+
+  // Create the transformation matrices.
   matrix = m3.identity();
   projectionMatrix = m3.projection(gl.canvas.width, gl.canvas.height);
-  translationMatrix = m3.translation(translation[0] + currentposition, translation[1]);
+  translationMatrix = m3.translation(
+    translation[0] + currentposition,
+    translation[1]
+  );
   rotationMatrix = m3.rotation(angleInRadians);
   scaleMatrix = m3.scaling(scale[0] + currentscale, scale[1] + currentscale);
   moveOriginMatrix = m3.translation(-50, -90);
@@ -216,60 +259,48 @@ function drawobject3() {
     }
   }
 
-  //set color
-  gl.uniform4f(colorUniformLocation,1, 0.9647, 0.2196, 1.0);
+  // Set the color.
+  gl.uniform4f(colorUniformLocation, 1, 0.9647, 0.2196, 1.0);
 
   // Set the matrix.
   gl.uniformMatrix3fv(matrixLocation, false, matrix);
 
-  //gl.clear( gl.COLOR_BUFFER_BIT );
+  // Draw the object.
   gl.drawArrays(primitiveType, offset, count);
 }
 
-var m3 = { 						//setup 3x3 transformation matrix object
+// This object defines a set of functions for performing 3x3 matrix transformations.
+
+var m3 = {
+  // Return the identity matrix.
   identity: function () {
-    return [
-      1, 0, 0,
-      0, 1, 0,
-      0, 0, 1,
-    ];
+    return [1, 0, 0, 0, 1, 0, 0, 0, 1];
   },
 
+  // Return a projection matrix that scales X and Y coordinates to the range [-1, 1].
+  // The resulting matrix flips the Y axis so that 0 is at the top.
   projection: function (width, height) {
-    // Note: This matrix flips the Y axis so that 0 is at the top.
-    return [
-      2 / width, 0, 0,
-      0, -2 / height, 0,
-      0, 0, 0
-    ];
+    return [2 / width, 0, 0, 0, -2 / height, 0, 0, 0, 0];
   },
 
+  // Return a matrix that translates coordinates by (tx, ty).
   translation: function (tx, ty) {
-    return [
-      1, 0, 0,
-      0, 1, 0,
-      tx, ty, 1,
-    ];
+    return [1, 0, 0, 0, 1, 0, tx, ty, 1];
   },
 
+  // Return a matrix that rotates coordinates by the given angle in radians.
   rotation: function (angleInRadians) {
     var c = Math.cos(angleInRadians);
     var s = Math.sin(angleInRadians);
-    return [
-      c, -s, 0,
-      s, c, 0,
-      0, 0, 1,
-    ];
+    return [c, -s, 0, s, c, 0, 0, 0, 1];
   },
 
+  // Return a matrix that scales coordinates by (sx, sy).
   scaling: function (sx, sy) {
-    return [
-      sx, 0, 0,
-      0, sy, 0,
-      0, 0, 1,
-    ];
+    return [sx, 0, 0, 0, sy, 0, 0, 0, 1];
   },
 
+  // Multiply two matrices together and return the result.
   multiply: function (a, b) {
     var a00 = a[0 * 3 + 0];
     var a01 = a[0 * 3 + 1];
@@ -303,51 +334,42 @@ var m3 = { 						//setup 3x3 transformation matrix object
   },
 };
 
-
 function setGeometry(gl, shape) {
   switch (shape) {
-    case 1:                     // Fill the buffer with the values that define a letter 'G'.
+    case 1:
+      // Define the vertex data for a letter 'G' and fill the buffer.
       gl.bufferData(
         gl.ARRAY_BUFFER,
         new Float32Array([
-          // left column
-          40, 0,
-          110, 0,
-          0, 150,
-          0, 150,
-          110, 0,
-          150, 150,
-
+          // Vertexes
+          40, 0, 110, 0, 0, 150, 0, 150, 110, 0, 150, 150,
         ]),
-        gl.STATIC_DRAW);
-
+        gl.STATIC_DRAW
+      );
       break;
     case 2:
+      // Define the vertex data for a line segment and fill the buffer.
       gl.bufferData(
         gl.ARRAY_BUFFER,
         new Float32Array([
-          // left column
-          30, 0,
-          180, 0,
-
+          // Vertexes
+          30, 0, 180, 0,
         ]),
-        gl.STATIC_DRAW);
-
+        gl.STATIC_DRAW
+      );
       break;
     case 3:
+      // Define the vertex data for a triangle and fill the buffer.
       gl.bufferData(
         gl.ARRAY_BUFFER,
         new Float32Array([
-          // left column
-          60, 0,
-          110, 0,
-          110, 100,
-          60, 0,
-          60, 100,
-          110, 100,
+          // Vertexes
+          50, 0, 90, 25, 50, 50, 50, 50, 10, 25, 50, 0, 50, 0, 10, 25, 50, 50,
+          50, 50, 10, 75, 50, 100, 50, 100, 90, 75, 50, 50, 50, 50, 90, 25, 50,
+          0,
         ]),
-        gl.STATIC_DRAW);
-
+        gl.STATIC_DRAW
+      );
       break;
   }
 }
