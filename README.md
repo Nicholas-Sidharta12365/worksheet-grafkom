@@ -4,4 +4,4 @@
 2. Nicholas Sidharta
 3. Hizkia Sebastian Ginting
 
-### Description on tasks is inside the '1' Folder
+### Description on tasks is inside the 'UTS' Folder
