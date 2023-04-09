@@ -14,6 +14,7 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.1/dist/flowbite.min.css" />
   </head>
 
 <!-- DEFINING THE BODY -->
@@ -24,9 +25,25 @@
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/WebGL_Logo.svg/2560px-WebGL_Logo.svg.png" class="h-8 mr-3" alt="Flowbite Logo" />
         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">MIDPOINT LINE</span>
     </a>
+
     <div class="flex md:order-2">
-        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" id = "confirm">Make the MidPoint Line</button>
+      <button id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" class="text-white bg-cyan-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-cyan-700 dark:focus:ring-blue-800" type="button">Slope Direction<svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+        <!-- Dropdown menu -->
+        <div id="dropdownHover" class="z-10 hidden bg-cyan-100 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
+              <li>
+                <a href="#" class="block px-4 py-2 hover:bg-cyan-300 dark:hover:bg-gray-600 dark:hover:text-white" id = "wind">Wind Direction</a>
+              </li>
+              <li>
+                <a href="#" class="block px-4 py-2 hover:bg-cyan-300 dark:hover:bg-gray-600 dark:hover:text-white" id = "fan">Fan Spread Direction</a>
+              </li>
+              <li>
+                <a href="#" class="block px-4 py-2 hover:bg-cyan-300 dark:hover:bg-gray-600 dark:hover:text-white" id = "octagram">Octagram Direction</a>
+              </li>
+            </ul>
+        </div>
     </div>
+    
     </div>
   </nav>
   <div class="bg-[#343b58] grid place-items-center min-h-screen w-full">
@@ -34,33 +51,9 @@
       <div class="bg-[#414868] rounded-xl shadow-lg p-6 flex gap-6">
         <canvas
           id="gl-canvas"
-          width="400"
-          height="400"
+          width="500"
+          height="500"
         ></canvas>
-        <div class="flex flex-col gap-3">
-          <div class="uppercase text-gray-300 text-sm tracking-wider">Point Settings</div>
-          <div id="settings" class="flex flex-col gap-2">
-            <b>Start Point</b>
-
-            <div class="">
-              <label for="x1">x1</label>
-              <input style="width: 100px;" class="rounded-full border px-4 py-1" type="number" id="x1" name="x1">
-  
-              <label for="y1">y1</label>
-              <input style="width: 100px;" class="rounded-full border px-4 py-1" type="number" id="y1" name="y1"> <br>
-            </div>
-
-            <text>End Point</text>
-
-            <div class="">
-              <label for="x2">x2</label>
-              <input style="width: 100px;" class="rounded-full border px-4 py-1" type="number" id="x2" name="x2">
-  
-              <label for="y2">y2</label>
-              <input style="width: 100px;" class="rounded-full border px-4 py-1" type="number" id="y2" name="y2"> <br>
-            </div> <br>
-          </div>
-        </div>
       </div>
     </div>
     <a href="./index.html">
@@ -70,42 +63,37 @@
       </button>
     </a>
   </div>
+  <script src="https://unpkg.com/flowbite@1.5.1/dist/flowbite.js"></script>
 </body>
 
 <script id="vertex-shader" type="x-shader/x-vertex">
   #version 300 es
-  
+
   in vec4 aPosition;
   in vec4 aColor;
   
   out vec4 vColor;
-
-  uniform float uTheta;
   
-  void main() {
-    gl_Position = aPosition;
-    vColor = aColor;
-
-    float s = sin(uTheta);
-    float c = cos(uTheta);
-  
-    gl_Position.x = -s*aPosition.y + c*aPosition.x;
-    gl_Position.y =  s*aPosition.x + c*aPosition.y;
-    gl_Position.z = 0.0;
-    gl_Position.w = 1.0;
+  void
+  main()
+  {
+      gl_Position = aPosition;
+      vColor = aColor;
+      gl_PointSize = 5.0;
   }
 </script>
 
 <script id="fragment-shader" type="x-shader/x-fragment">
   #version 300 es
-  
   precision mediump float;
   
   in vec4 vColor;
   out vec4 fColor;
   
-  void main() {
-    fColor = vColor;
+  void
+  main()
+  {
+      fColor = vColor;
   }
 </script>
 
