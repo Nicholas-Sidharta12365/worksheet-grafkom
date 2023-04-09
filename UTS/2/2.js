@@ -33,22 +33,20 @@ function init() {
 
 
     document.getElementById("confirm").onclick = function () {
-        // Menerima titik titik xA, yA, xB, dan yB
-        // Titik bisa dilakukan di kuadran manapun, namun posisi titik A harus berada di kiri titik B
-        xA = document.getElementById("xA").value;
-        yA = document.getElementById("yA").value;
-        xB = document.getElementById("xB").value;
-        yB = document.getElementById("yB").value;
-        console.log("Points:" + xA + " " + yA + " " + xB + " " + yB);
-        MidpointLine(xA, xB, yA, yB, listx, listy); // Melakukan algoritma MidpointLine pada titik-titik tersebut
-        console.dir(listx);
-        console.dir(listy);
+        // Menerima start dan end point
+        xA = document.getElementById("x1").value;
+        yA = document.getElementById("y1").value;
+        xB = document.getElementById("x2").value;
+        yB = document.getElementById("y2").value;
+
+        // Melakukan algoritma MidpointLine
+        MidpointLine(xA, xB, yA, yB, listx, listy); 
 
         pointCount = listy.length;
 
         listLines.length = 0;
 
-        // Memasukkan informasi titik-titik hasil algorita midpoint line menjadi vertex yang akan digambar
+        // Membuat verteks dari titik 
         for (let i = 0; i < pointCount; i++) {
             var current_x = listx[i];
             var current_y = listy[i];
@@ -84,7 +82,7 @@ function render() {
     gl.drawArrays(gl.LINE_STRIP, 0, pointCount);
 }
 
-// Algoritma midpointline
+// Algoritma midpoint line
 
 function MidpointLine(xA, xB, yA, yB, listx, listy) {
     var Po, dx, dxAbs, dy, dyAbs, xk, yk;
@@ -101,29 +99,7 @@ function MidpointLine(xA, xB, yA, yB, listx, listy) {
     listx.push(parseInt(xA));
     listy.push(parseInt(yA));
 
-    if (dy <= dx && dy > 0) {
-        Po = (2 * dyAbs) - dxAbs;
-        xk = xA;
-        console.log("xk " + xk);
-        yk = yA;
-        console.log("yk " + yk);
-
-        while (xA < xB) {
-            xA++;
-
-            if (Po < 0) {
-                xk++;
-                Po = Po + (2 * dyAbs);
-            } else {
-                xk++;
-                yk++;
-                Po = Po + (2 * dyAbs) - (2 * dxAbs);
-            }
-
-            listx.push(parseInt(xk));
-            listy.push(parseInt(yk));
-        }
-    } else {
+    if (dy > dx || dy <= 0) {
         if (dy > dx && dy > 0) {
             Po = (2 * dxAbs) - dyAbs;
             xk = xA;
@@ -188,6 +164,26 @@ function MidpointLine(xA, xB, yA, yB, listx, listy) {
                     }
                 }
             }
+        }
+    } else {
+        Po = (2 * dyAbs) - dxAbs;
+        xk = xA;
+        yk = yA;
+
+        while (xA < xB) {
+            xA++;
+
+            if (Po < 0) {
+                xk++;
+                Po = Po + (2 * dyAbs);
+            } else {
+                xk++;
+                yk++;
+                Po = Po + (2 * dyAbs) - (2 * dxAbs);
+            }
+
+            listx.push(parseInt(xk));
+            listy.push(parseInt(yk));
         }
     }
 }
