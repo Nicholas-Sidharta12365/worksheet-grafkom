@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="pastel">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Worksheet 2</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+    integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@2.14.3/dist/full.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body onload="main()">
+  <div class="bg-pink-50 grid place-items-center min-h-screen w-full">
+    <div class="flex flex-col gap-2">
+      <div class="bg-white rounded-xl shadow-lg p-6 flex gap-6">
+        <canvas id="webgl" width="512" height="512" class="rounded-xl">
+          Please use a browser that supports "canvas"
+        </canvas>
+        <div class="flex flex-col gap-4">
+          <div class="flex gap-2">
+            <a class="btn btn-circle btn-sm btn-secondary" href="./puppy.html">🐕</a>
+            <a class="btn btn-circle btn-sm btn-secondary btn-active" href="./duckling.html">🐤</a>
+        </div>
+          <div class="font-extrabold text-5xl text-pink-900">Lil Duckling</div>
+          <div class="uppercase text-gray-500 text-sm tracking-wider">keyboard controls</div>
+          <div class="flex-1 flex flex-col gap-3 w-64 uppercase text-pink-800 text-sm">
+            <div class="flex items-center gap-1">
+              <kbd class="kbd">▲</kbd><kbd class="kbd">▼</kbd>
+              <div class="tracking-wider pl-2">head</div>
+            </div>
+            <div class="flex items-center gap-1">
+              <kbd class="kbd">◀︎</kbd><kbd class="kbd">▶︎</kbd>
+              <div class="tracking-wider pl-2">wings</div>
+            </div>
+            <div class="flex items-center gap-1">
+              <kbd class="kbd">x</kbd><kbd class="kbd">z</kbd>
+              <div class="tracking-wider pl-2">beak</div>
+            </div>
+            <div class="flex items-center gap-1">
+              <kbd class="kbd">c</kbd><kbd class="kbd">v</kbd>
+              <div class="tracking-wider pl-2">legs</div>
+            </div>
+            <div class="flex items-center gap-1">
+              <kbd class="kbd">b</kbd><kbd class="kbd">n</kbd>
+              <div class="tracking-wider pl-2">feet</div>
+            </div>
+          </div>
+          <div id="end-polygon" title="Finish drawing polygon and render" class="btn btn-secondary">
+            demo animation
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/Common/webgl-utils.js"></script>
+  <script src="js/Common/webgl-debug.js"></script>
+  <script src="js/Common/cuon-utils.js"></script>
+  <script src="js/Common/cuon-matrix.js"></script>
+  <script src="js/duckling.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
