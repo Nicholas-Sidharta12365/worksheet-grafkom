@@ -94,43 +94,43 @@ function main() {
 
 // All in degrees
 var ANGLE_STEP = 1.0;       // The increments of rotation angle
-var g_kepalaAngle = 0.0;    // The rotation angle of head
-var g_sayapAngle = 0.0;     // The rotation angle of wing
-var g_moncongAngle = 0.0;   // The rotation angle of beak
-var g_kakiAngle = 0.0;      // The rotation angle of leg
-var g_telapakAngle = 0.0;   // The rotation angle of feet
+var g_angleHead = 0.0;    // The rotation angle of head
+var g_angleWing = 0.0;     // The rotation angle of wing
+var g_angleBeak = 0.0;   // The rotation angle of beak
+var g_angleLeg = 0.0;      // The rotation angle of leg
+var g_angleFeet = 0.0;   // The rotation angle of feet
 
 function keydown(ev, gl, o, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix) {
   switch (ev.keyCode) {
     case 40: // Up arrow key -> the positive rotation of head joint
-      if (g_kepalaAngle < 10.0) g_kepalaAngle += ANGLE_STEP;
+      if (g_angleHead < 10.0) g_angleHead += ANGLE_STEP;
       break;
     case 38: // Down arrow key -> the negative rotation of head joint
-      if (g_kepalaAngle > -10.0) g_kepalaAngle -= ANGLE_STEP;
+      if (g_angleHead > -10.0) g_angleHead -= ANGLE_STEP;
       break;
     case 39: // Right arrow key -> the positive rotation of wing joint
-      if (g_sayapAngle < 35.0) g_sayapAngle = (g_sayapAngle + ANGLE_STEP * 4) % 360;
+      if (g_angleWing < 35.0) g_angleWing = (g_angleWing + ANGLE_STEP * 4) % 360;
       break;
     case 37: // Left arrow key -> the negative rotation of wings joint
-      if (g_sayapAngle > 0.0) g_sayapAngle = (g_sayapAngle - ANGLE_STEP * 4) % 360;
+      if (g_angleWing > 0.0) g_angleWing = (g_angleWing - ANGLE_STEP * 4) % 360;
       break;
     case 90: // 'ｚ'key -> the positive rotation of beak joint
-      if (g_moncongAngle < 0.0) g_moncongAngle = (g_moncongAngle + ANGLE_STEP) % 360;
+      if (g_angleBeak < 0.0) g_angleBeak = (g_angleBeak + ANGLE_STEP) % 360;
       break;
     case 88: // 'x'key -> the negative rotation of beak joint
-      if (g_moncongAngle > -30.0) g_moncongAngle = (g_moncongAngle - ANGLE_STEP) % 360;
+      if (g_angleBeak > -30.0) g_angleBeak = (g_angleBeak - ANGLE_STEP) % 360;
       break;
     case 86: // 'v'key -> the positive rotation of leg joint
-      if (g_kakiAngle < 30.0) g_kakiAngle += ANGLE_STEP
+      if (g_angleLeg < 30.0) g_angleLeg += ANGLE_STEP
       break;
     case 67: // 'c'key -> the nagative rotation of leg joint
-      if (g_kakiAngle > -30.0) g_kakiAngle -= ANGLE_STEP
+      if (g_angleLeg > -30.0) g_angleLeg -= ANGLE_STEP
       break;
     case 66: // 'b'key -> the positive rotation of feet joint
-      if (g_telapakAngle < 60.0) g_telapakAngle += ANGLE_STEP
+      if (g_angleFeet < 60.0) g_angleFeet += ANGLE_STEP
       break;
     case 78: // 'n'key -> the nagative rotation of feet joint
-      if (g_telapakAngle > -30.0) g_telapakAngle -= ANGLE_STEP
+      if (g_angleFeet > -30.0) g_angleFeet -= ANGLE_STEP
       break;
     default: return; // Skip drawing at no effective action
   }
@@ -139,11 +139,11 @@ function keydown(ev, gl, o, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMat
 }
 
 var g_baseBuffer = null;     // Buffer object for a base
-var g_kepalaBuffer = null;     // Buffer object for head
-var g_sayapBuffer = null;     // Buffer object for wings
-var g_moncongBuffer = null;     // Buffer object for beak
-var g_kakiBuffer = null;     // Buffer object for legs
-var g_telapakBuffer = null;     // Buffer object for feet
+var g_headBuffer = null;     // Buffer object for head
+var g_wingBuffer = null;     // Buffer object for wings
+var g_beakBuffer = null;     // Buffer object for beak
+var g_legBuffer = null;     // Buffer object for legs
+var g_feetBuffer = null;     // Buffer object for feet
 
 function initVertexBuffers(gl) {
   // Vertex coordinate (prepare coordinates of cuboids for all segments)
@@ -156,7 +156,7 @@ function initVertexBuffers(gl) {
     5.0, 5.0, -5.0, -5.0, 5.0, -5.0, -5.0, 12.0, -5.0, 5.0, 12.0, -5.0  // v4-v7-v6-v5 back
   ]);
 
-  var vertices_kepala = new Float32Array([  // Head(8x7x6)
+  var vertices_head = new Float32Array([  // Head(8x7x6)
     4.0, 15.0, 9.5, -4.0, 15.0, 9.5, -4.0, 8.0, 9.5, 4.0, 8.0, 9.5, // v0-v1-v2-v3 front
     4.0, 15.0, 9.5, 4.0, 8.0, 9.5, 4.0, 8.0, 3.5, 4.0, 15.0, 3.5, // v0-v3-v4-v5 right
     4.0, 15.0, 9.5, 4.0, 15.0, 3.5, -4.0, 15.0, 3.5, -4.0, 15.0, 9.5, // v0-v5-v6-v1 up
@@ -165,7 +165,7 @@ function initVertexBuffers(gl) {
     4.0, 8.0, 3.5, -4.0, 8.0, 3.5, -4.0, 15.0, 3.5, 4.0, 15.0, 3.5  // v4-v7-v6-v5 back
   ]);
 
-  var vertices_sayap = new Float32Array([  // Wing(2x6x9.8)
+  var vertices_wing = new Float32Array([  // Wing(2x6x9.8)
     1.0, -3.0, 4.9, -1.0, -3.0, 4.9, -1.0, 3.0, 4.9, 1.0, 3.0, 4.9,  // v4-v7-v6-v5 front
     1.0, 3.0, -4.9, 1.0, -3.0, -4.9, 1.0, -3.0, 4.9, 1.0, 3.0, 4.9, // v0-v3-v4-v5 right
     1.0, 3.0, -4.9, 1.0, 3.0, 4.9, -1.0, 3.0, 4.9, -1.0, 3.0, -4.9, // v0-v5-v6-v1 up
@@ -174,7 +174,7 @@ function initVertexBuffers(gl) {
     1.0, 3.0, -4.9, -1.0, 3.0, -4.9, -1.0, -3.0, -4.9, 1.0, -3.0, -4.9, // v0-v1-v2-v3 back
   ]);
 
-  var vertices_moncong = new Float32Array([  // Beak(7x1x7)
+  var vertices_beak = new Float32Array([  // Beak(7x1x7)
     3.5, 1.0, 2.0, -3.5, 1.0, 2.0, -3.5, 0.0, 2.0, 3.5, 0.0, 2.0, // v0-v1-v2-v3 front
     3.5, 1.0, 2.0, 3.5, 0.0, 2.0, 3.5, 0.0, -2.0, 3.5, 1.0, -2.0, // v0-v3-v4-v5 right
     3.5, 1.0, 2.0, 3.5, 1.0, -2.0, -3.5, 1.0, -2.0, -3.5, 1.0, 2.0, // v0-v5-v6-v1 up
@@ -183,7 +183,7 @@ function initVertexBuffers(gl) {
     3.5, 0.0, -2.0, -3.5, 0.0, -2.0, -3.5, 1.0, -2.0, 3.5, 1.0, -2.0  // v4-v7-v6-v5 back
   ]);
 
-  var vertices_kaki = new Float32Array([  // Leg(2x4x2)
+  var vertices_leg = new Float32Array([  // Leg(2x4x2)
     1.0, 2.0, 1.0, -1.0, 2.0, 1.0, -1.0, -2.0, 1.0, 1.0, -2.0, 1.0, // v0-v1-v2-v3 front
     1.0, 2.0, 1.0, 1.0, -2.0, 1.0, 1.0, -2.0, -1.0, 1.0, 2.0, -1.0, // v0-v3-v4-v5 right
     1.0, 2.0, 1.0, 1.0, 2.0, -1.0, -1.0, 2.0, -1.0, -1.0, 2.0, 1.0, // v0-v5-v6-v1 up
@@ -192,7 +192,7 @@ function initVertexBuffers(gl) {
     1.0, -2.0, -1.0, -1.0, -2.0, -1.0, -1.0, 2.0, -1.0, 1.0, 2.0, -1.0  // v4-v7-v6-v5 back
   ]);
 
-  var vertices_telapak = new Float32Array([  // Feet(4x1x4)
+  var vertices_feet = new Float32Array([  // Feet(4x1x4)
     2.0, 0.0, 2.0, -2.0, 0.0, 2.0, -2.0, 1.0, 2.0, 2.0, 1.0, 2.0, // v0-v1-v2-v3 front
     2.0, 0.0, 2.0, 2.0, 1.0, 2.0, 2.0, 1.0, -2.0, 2.0, 0.0, -2.0, // v0-v3-v4-v5 right
     -2.0, 1.0, -2.0, 2.0, 1.0, -2.0, 2.0, 1.0, 2.0, -2.0, 1.0, 2.0, // v7-v4-v3-v2 up
@@ -223,13 +223,13 @@ function initVertexBuffers(gl) {
 
   // Write coords to buffers, but don't assign to attribute variables
   g_baseBuffer = initArrayBufferForLaterUse(gl, vertices_base, 3, gl.FLOAT);
-  g_kepalaBuffer = initArrayBufferForLaterUse(gl, vertices_kepala, 3, gl.FLOAT);
-  g_sayapBuffer = initArrayBufferForLaterUse(gl, vertices_sayap, 3, gl.FLOAT);
-  g_moncongBuffer = initArrayBufferForLaterUse(gl, vertices_moncong, 3, gl.FLOAT);
-  g_kakiBuffer = initArrayBufferForLaterUse(gl, vertices_kaki, 3, gl.FLOAT);
-  g_telapakBuffer = initArrayBufferForLaterUse(gl, vertices_telapak, 3, gl.FLOAT);
+  g_headBuffer = initArrayBufferForLaterUse(gl, vertices_head, 3, gl.FLOAT);
+  g_wingBuffer = initArrayBufferForLaterUse(gl, vertices_wing, 3, gl.FLOAT);
+  g_beakBuffer = initArrayBufferForLaterUse(gl, vertices_beak, 3, gl.FLOAT);
+  g_legBuffer = initArrayBufferForLaterUse(gl, vertices_leg, 3, gl.FLOAT);
+  g_feetBuffer = initArrayBufferForLaterUse(gl, vertices_feet, 3, gl.FLOAT);
 
-  if (!g_baseBuffer || !g_kepalaBuffer || !g_sayapBuffer || !g_moncongBuffer || !g_kakiBuffer || !g_telapakBuffer) return -1;
+  if (!g_baseBuffer || !g_headBuffer || !g_wingBuffer || !g_beakBuffer || !g_legBuffer || !g_feetBuffer) return -1;
 
   // Write normals to a buffer, assign it to a_Normal and enable it
   if (!initArrayBuffer(gl, 'a_Normal', normals, 3, gl.FLOAT)) return -1;
@@ -303,63 +303,63 @@ function draw(gl, n, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix) {
   var arm1Length = 10.0;
   pushMatrix(g_modelMatrix);
   g_modelMatrix.translate(0.0, baseHeight, 0.0);     // Move onto the base
-  g_modelMatrix.rotate(g_kepalaAngle, 1.0, 0.0, 0.0);  // Rotate around the x-axis
-  drawSegment(gl, n, g_kepalaBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
+  g_modelMatrix.rotate(g_angleHead, 1.0, 0.0, 0.0);  // Rotate around the x-axis
+  drawSegment(gl, n, g_headBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
 
   // Top beak
   var moncongHeight = 10.0
   pushMatrix(g_modelMatrix);
   g_modelMatrix.translate(0.0, moncongHeight, 10.0);
-  g_modelMatrix.rotate(g_moncongAngle, 1.0, 0.0, 0.0);  // Rotate around the x-axis
-  drawSegment(gl, n, g_moncongBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
+  g_modelMatrix.rotate(g_angleBeak, 1.0, 0.0, 0.0);  // Rotate around the x-axis
+  drawSegment(gl, n, g_beakBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
   g_modelMatrix = popMatrix();
 
   // Bottom beak
   g_modelMatrix.translate(0.0, moncongHeight - 1, 10.0);
-  g_modelMatrix.rotate(-g_moncongAngle, 1.0, 0.0, 0.0);  // Rotate around the x-axis
-  drawSegment(gl, n, g_moncongBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
+  g_modelMatrix.rotate(-g_angleBeak, 1.0, 0.0, 0.0);  // Rotate around the x-axis
+  drawSegment(gl, n, g_beakBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
   g_modelMatrix = popMatrix();
 
   // Left wing
   var sayapHeight = 9.0
   pushMatrix(g_modelMatrix);
   g_modelMatrix.translate(6.0, sayapHeight, 0.0);
-  g_modelMatrix.rotate(g_sayapAngle, 0.0, 0.0, 1.0);  // Rotate around the z-axis
-  drawSegment(gl, n, g_sayapBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
+  g_modelMatrix.rotate(g_angleWing, 0.0, 0.0, 1.0);  // Rotate around the z-axis
+  drawSegment(gl, n, g_wingBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
   g_modelMatrix = popMatrix();
 
   // Right wing
   pushMatrix(g_modelMatrix);
   g_modelMatrix.translate(-6.0, sayapHeight, 0.0);
-  g_modelMatrix.rotate(-g_sayapAngle, 0.0, 0.0, 1.0);  // Rotate around the z-axis
-  drawSegment(gl, n, g_sayapBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
+  g_modelMatrix.rotate(-g_angleWing, 0.0, 0.0, 1.0);  // Rotate around the z-axis
+  drawSegment(gl, n, g_wingBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
   g_modelMatrix = popMatrix();
 
   // Left leg
   var kakiHeight = 3.0
   pushMatrix(g_modelMatrix);
   g_modelMatrix.translate(-5.0, kakiHeight, 0.0);
-  g_modelMatrix.rotate(g_kakiAngle, 1.0, 0.0, 0.0);  // Rotate around the x-axis
-  drawSegment(gl, n, g_kakiBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
+  g_modelMatrix.rotate(g_angleLeg, 1.0, 0.0, 0.0);  // Rotate around the x-axis
+  drawSegment(gl, n, g_legBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
   g_modelMatrix = popMatrix();
 
   // Right leg
   g_modelMatrix.translate(1.0, kakiHeight, 0.0);
-  g_modelMatrix.rotate(g_kakiAngle, 1.0, 0.0, 0.0);  // Rotate around the x-axis
-  drawSegment(gl, n, g_kakiBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
+  g_modelMatrix.rotate(g_angleLeg, 1.0, 0.0, 0.0);  // Rotate around the x-axis
+  drawSegment(gl, n, g_legBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
 
   // Left foot
   var telapakHeight = -2.5
   pushMatrix(g_modelMatrix);
   g_modelMatrix.translate(-6.0, telapakHeight, 1.0);
-  g_modelMatrix.rotate(g_telapakAngle, 1.0, 0.0, 0.0);  // Rotate around the x-axis
-  drawSegment(gl, n, g_telapakBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
+  g_modelMatrix.rotate(g_angleFeet, 1.0, 0.0, 0.0);  // Rotate around the x-axis
+  drawSegment(gl, n, g_feetBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
   g_modelMatrix = popMatrix();
 
   // Right foot
   g_modelMatrix.translate(0.0, telapakHeight, 1.0);
-  g_modelMatrix.rotate(g_telapakAngle, 1.0, 0.0, 0.0);  // Rotate around the x-axis
-  drawSegment(gl, n, g_telapakBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
+  g_modelMatrix.rotate(g_angleFeet, 1.0, 0.0, 0.0);  // Rotate around the x-axis
+  drawSegment(gl, n, g_feetBuffer, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix); // Draw
 
 }
 
@@ -396,23 +396,23 @@ function drawSegment(gl, n, buffer, viewProjMatrix, a_Position, u_MvpMatrix, u_N
 }
 
 function animation(gl, o, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix) {
-  if (g_sayapAngle >= 35.0) {
+  if (g_angleWing >= 35.0) {
     arah = 0;
-  } else if (g_sayapAngle <= 0.0) {
+  } else if (g_angleWing <= 0.0) {
     arah = 1;
   }
 
-  if (arah == 1) g_sayapAngle = (g_sayapAngle + ANGLE_STEP * 4) % 360;
-  if (arah == 0) g_sayapAngle = (g_sayapAngle - ANGLE_STEP * 4) % 360;
+  if (arah == 1) g_angleWing = (g_angleWing + ANGLE_STEP * 4) % 360;
+  if (arah == 0) g_angleWing = (g_angleWing - ANGLE_STEP * 4) % 360;
 
-  if (g_kepalaAngle >= 10.0) {
+  if (g_angleHead >= 10.0) {
     arah2 = 0;
-  } else if (g_kepalaAngle <= -10.0) {
+  } else if (g_angleHead <= -10.0) {
     arah2 = 1;
   }
 
-  if (arah2 == 1) g_kepalaAngle += ANGLE_STEP/2;
-  if (arah2 == 0) g_kepalaAngle -= ANGLE_STEP/2;
+  if (arah2 == 1) g_angleHead += ANGLE_STEP/2;
+  if (arah2 == 0) g_angleHead -= ANGLE_STEP/2;
 
   draw(gl, o, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix)
   animationStart = requestAnimationFrame(() => animation(gl, o, viewProjMatrix, a_Position, u_MvpMatrix, u_NormalMatrix));
