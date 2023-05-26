@@ -1,0 +1,476 @@
+<html>
+
+<head>
+    <title>Sample Hierarchical Modelling with lighting, texture and shadow</title>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+    <script type="text/javascript" src="js/glMatrix-0.9.5.min.js"></script>
+    <script type="text/javascript" src="js/webgl-utils.js"></script>
+
+    <script id="vs-shadowmap" type="x-shader/x-vertex">#version 300 es
+ 
+			uniform mat4 uMVMatrix;
+			uniform mat4 uPMatrix;
+			
+			in vec3 aVertexPosition;
+			
+			out vec4 vPosition;
+
+			void main() {
+				vPosition = uMVMatrix * vec4(aVertexPosition, 1.0);
+                gl_Position = uPMatrix * vPosition;
+			}
+		</script>
+
+    <script id="fs-shadowmap" type="x-shader/x-fragment">#version 300 es
+ 
+			precision mediump int;
+			precision mediump float;
+			
+			in vec4 vPosition;
+			out vec4 fragColor;
+
+			uniform vec3 uPointLightingLocation;
+			uniform float uFarPlane;
+
+			void main() {
+			  // get distance between fragment and light source
+			  float lightDistance = length(vPosition.xyz - uPointLightingLocation);
+			  
+			  // map to [0;1] range by dividing by far_plane
+			  lightDistance = lightDistance / uFarPlane;
+			  
+			  // write this as modified depth
+			  fragColor = vec4(lightDistance, 0.0, 0.0, 1.0);
+			  
+			}
+		</script>
+
+    <script id="vs" type="x-shader/x-vertex">#version 300 es
+ 
+            in vec3 aVertexPosition;
+            in vec3 aVertexNormal;
+            
+            uniform mat4 uMVMatrix;
+            uniform mat4 uPMatrix;
+            uniform mat3 uNMatrix;
+            
+            in  vec2 vTexCoord;
+
+            out vec2 fTexCoord;
+            out vec3 vTransformedNormal;
+            out vec4 vPosition;
+            
+            void main(void) {
+                vPosition = uMVMatrix * vec4(aVertexPosition, 1.0);
+                gl_Position = uPMatrix * vPosition;
+                fTexCoord = vTexCoord;
+                vTransformedNormal = uNMatrix * aVertexNormal;
+            }
+        </script>
+
+    <script id="fs" type="x-shader/x-fragment">#version 300 es
+            
+            precision mediump float;
+            
+            in vec2 fTexCoord;
+            in vec3 vTransformedNormal;
+            in vec4 vPosition;
+			in vec4 vVertexRelativeToLight;
+			
+            out vec4 fragColor;
+
+            uniform vec3 uMaterialAmbientColor;
+            uniform vec3 uMaterialDiffuseColor;
+            uniform vec3 uMaterialSpecularColor;
+            uniform float uMaterialShininess;
+            uniform float uFarPlane;
+            
+            uniform vec3 uAmbientColor;
+            
+            uniform vec3 uPointLightingLocation;
+            uniform vec3 uPointLightingSpecularColor;
+            uniform vec3 uPointLightingDiffuseColor;
+            
+            uniform bool uUseLighting;
+            uniform bool uUseMaterial;
+            uniform bool uUseTexture;
+            
+            uniform sampler2D thetexture;
+            uniform samplerCube shadowmap;
+            
+			bool in_shadow(void) {
+				vec3 fragToLight = vPosition.xyz - uPointLightingLocation; 
+				float closestDepth = texture(shadowmap, fragToLight).x;
+				closestDepth *= uFarPlane;
+				float currentDepth = length(fragToLight);
+				// now test for shadows
+				float bias = 0.3; 
+				return (currentDepth -  bias > closestDepth);
+			}
+
+            void main(void) {
+				
+                vec3 materialAmbientColor = vec3(1.0, 1.0, 1.0);
+                vec3 materialDiffuseColor = vec3(1.0, 1.0, 1.0);
+                vec3 materialSpecularColor = vec3(1.0, 1.0, 1.0);
+                if(uUseMaterial) {
+					materialAmbientColor = uMaterialAmbientColor;
+					materialDiffuseColor = uMaterialDiffuseColor;
+					materialSpecularColor = uMaterialSpecularColor;
+				}
+                
+                float alpha = 1.0;
+                
+                if(uUseTexture) {
+					vec4 textureColor = texture(thetexture, vec2(fTexCoord.s, fTexCoord.t));
+					materialAmbientColor = materialAmbientColor * textureColor.rgb;
+					materialDiffuseColor = materialDiffuseColor * textureColor.rgb;
+					alpha = textureColor.a;
+				}
+                
+                vec3 ambientLightWeighting = uAmbientColor;
+                
+                
+                if(uUseLighting) {
+					
+					vec3 lightDirection = normalize(uPointLightingLocation - vPosition.xyz);
+					vec3 normal = normalize(vTransformedNormal);
+					
+					vec3 specularLightWeighting = vec3(0.0, 0.0, 0.0);
+					vec3 eyeDirection = normalize(-vPosition.xyz);
+					vec3 reflectionDirection = reflect(-lightDirection, normal);
+					
+					float specularLightBrightness = pow(max(dot(reflectionDirection, eyeDirection), 0.0), uMaterialShininess);
+					specularLightWeighting = uPointLightingSpecularColor * specularLightBrightness;
+					
+					float diffuseLightBrightness = max(dot(normal, lightDirection), 0.0);
+					vec3 diffuseLightWeighting = uPointLightingDiffuseColor * diffuseLightBrightness;
+					
+					if(in_shadow()) {
+						diffuseLightWeighting = vec3(0.0, 0.0, 0.0);
+						specularLightWeighting = vec3(0.0, 0.0, 0.0);
+					}
+					
+					fragColor = vec4(materialAmbientColor * ambientLightWeighting
+					  + materialDiffuseColor * diffuseLightWeighting
+					  + materialSpecularColor * specularLightWeighting,
+					  alpha);
+				} else {
+					fragColor = vec4(materialAmbientColor  * ambientLightWeighting, alpha);
+				}
+				
+            }
+        </script>
+
+    <script type="text/javascript" src="js/duck.js"></script>
+    <script type="text/javascript" src="js/puppy.js"></script>
+    <script type="text/javascript" src="js/cat.js"></script>
+    <script type="text/javascript" src="js/cube-and-box.js"></script>
+    <script type="text/javascript" src="js/animasi.js"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" type="text/css" href="css/box.css">
+    <link rel="stylesheet" type="text/css" href="css/check.css">
+    <link rel="stylesheet" type="text/css" href="css/slider.css">
+
+    <script src="js/jquery.min.js"></script>
+</head>
+
+<body onload="webGLStart();" class="w3-black">
+    <div class="bg-[#121212] grid place-items-center min-h-screen w-full">
+        <div class="flex flex-col gap-2">
+            <div class="cube-loader">
+                <div class="cube-top"></div>
+                <div class="cube-wrapper">
+                  <span style="--i:0" class="cube-span"></span>
+                  <span style="--i:1" class="cube-span"></span>
+                  <span style="--i:2" class="cube-span"></span>
+                  <span style="--i:3" class="cube-span"></span>
+                </div>
+              </div>
+              <div class="my-8 text-center font-bold text-5xl">
+                <span class="text-white" style="text-shadow: 0px 0px 32px #00ff08;">Momen Grafkom</span>
+              </div>
+            <div class="bg-[#2D2D44] rounded-xl shadow-lg p-6 flex gap-6 flex-wrap">
+                <canvas id="canvas" width="720" height="512" class="rounded-xl">
+                    Please use a browser that supports "canvas"
+                </canvas>
+                <div class="flex flex-col w-[33rem]">
+                    <div class="font-extrabold text-4xl text-green-400 mb-4 text-center mb-8">PROYEK AKHIR</div>
+                    <div class="tabs mb-4">
+                        <a for="general" class="tab tab-lifted tab-active bg-blue-400 rounded p-2 text-white font-bold hover:bg-blue-600 cursor-pointer">🎮 Control</a>
+                        <a for="duck" class="tab tab-lifted tab-active bg-blue-400 rounded p-2 text-white font-bold hover:bg-blue-600 cursor-pointer">🐔 Chicken</a>
+                        <a for="cat" class="tab tab-lifted tab-active bg-blue-400 rounded p-2 text-white font-bold hover:bg-blue-600 cursor-pointer">🙀 Cat</a>
+                        <a for="dog" class="tab tab-lifted tab-active bg-blue-400 rounded p-2 text-white font-bold hover:bg-blue-600 cursor-pointer">🐶 Dog</a>
+                        <a for="cubebox" class="tab tab-lifted tab-active bg-blue-400 rounded p-2 text-white font-bold hover:bg-blue-600 cursor-pointer">🧊Cube&📦Cuboid</a>
+                    </div>
+                    <div id="tab-general" class="grid grid-cols-2 gap-4">
+                        <div class="flex flex-col gap-4">
+                            <div>
+                                <div class="uppercase mb-2 text-yellow-400 text-md tracking-wider font-bold">toggle
+                                    controls
+                                </div>
+                                <div class="flex flex-col text-[#33E1ED] text-sm font-semibold">
+                                    <label class="cursor-pointer label pb-0.5 grid grid-cols-2">
+                                        <span class="label-text">use animation</span>
+                                        <label class="container w-[15px] h-[15px]">
+                                            <input type="checkbox" id="animation" checked="checked" class="checkbox">
+                                            <svg viewBox="0 0 64 64" height="15px" width="15px">
+                                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
+                                            </svg>
+                                        </label>
+                                    </label>
+                                    <label class="cursor-pointer label pb-0.5 grid grid-cols-2">
+                                        <span class="label-text">use lighting</span>
+                                        <label class="container w-[15px] h-[15px]">
+                                            <input type="checkbox" id="lighting" checked="checked" class="checkbox">
+                                            <svg viewBox="0 0 64 64" height="15px" width="15px">
+                                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
+                                            </svg>
+                                        </label>
+                                    </label>
+                                    <label class="cursor-pointer label pb-0.5 grid grid-cols-2">
+                                        <span class="label-text">use texture</span>
+                                        <label class="container w-[15px] h-[15px]">
+                                            <input type="checkbox" id="texture" checked="checked" class="checkbox">
+                                            <svg viewBox="0 0 64 64" height="15px" width="15px">
+                                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
+                                            </svg>
+                                        </label>
+                                    </label>
+                                    <label class="cursor-pointer label pb-0.5 grid grid-cols-2">
+                                        <span class="label-text">use wireframe view</span>
+                                        <label class="container w-[15px] h-[15px]">
+                                            <input type="checkbox" id="wireframe" class="checkbox">
+                                            <svg viewBox="0 0 64 64" height="15px" width="15px">
+                                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
+                                            </svg>
+                                        </label>
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uppercase mb-2 text-yellow-400 text-md tracking-wider font-bold">point light
+                                    controls</div>
+                                <div class="flex flex-col gap-2 text-sm">
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <label class="input-group input-group-xs text-red-400 font-semibold">
+                                            <span>Red</span>
+                                            <input type="text" id="pointR" value="0.5"
+                                                class="w-full input input-bordered input-sm p-2 rounded" />
+                                        </label>
+                                        <label class="input-group input-group-xs text-green-400 font-semibold">
+                                            <span>Green</span>
+                                            <input type="text" id="pointG" value="0.5"
+                                                class="w-full input input-bordered input-sm p-2 rounded" />
+                                        </label>
+                                        <label class="input-group input-group-xs text-blue-400 font-semibold">
+                                            <span>Blue</span>
+                                            <input type="text" id="pointB" value="0.5"
+                                                class="w-full input input-bordered input-sm p-2 rounded" />
+                                        </label>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <div class="font-semibold pr-2 text-white">x</div><input id="lightPositionX" type="range" min="-100"
+                                            max="100" value="0" class="range range-sm range-accent" />
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <div class="font-semibold pr-2 text-white">y</div><input id="lightPositionY" type="range" min="-50"
+                                            max="50" value="0" class="range range-sm range-accent" />
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <div class="font-semibold pr-2 text-white">z</div><input id="lightPositionZ" type="range" min="-300"
+                                            max="-100" value="-200" class="range range-sm range-accent" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uppercase mb-2 text-yellow-400 text-md tracking-wider font-bold">ambient light
+                                    controls</div>
+                                <div class="flex flex-col gap-2 text-pink-800 text-sm">
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <label class="input-group input-group-xs text-red-400 font-semibold">
+                                            <span>Red</span>
+                                            <input type="text" id="ambientR" value="0.2"
+                                                class="w-full input input-bordered input-sm p-2 rounded" />
+                                        </label>
+                                        <label class="input-group input-group-xs text-green-400 font-semibold">
+                                            <span>Green</span>
+                                            <input type="text" id="ambientG" value="0.2"
+                                                class="w-full input input-bordered input-sm p-2 rounded" />
+                                        </label>
+                                        <label class="input-group input-group-xs text-blue-400 font-semibold">
+                                            <span>Blue</span>
+                                            <input type="text" id="ambientB" value="0.2"
+                                                class="w-full input input-bordered input-sm p-2 rounded" />
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="camera-controls" class="text-sm flex flex-col gap-1.5">
+                            <div class="uppercase mb-2 text-yellow-400 text-md tracking-wider font-bold">camera controls</div>
+                            <select class="select select-sm select-bordered w-full text-semibold text-blue-600 rounded" id="camera-select">
+                                <option class="text-semibold text-blue-600" value="default">Default View</option>
+                                <option class="text-semibold text-blue-600" value="dog">Dog View</option>
+                            </select>
+                            <div class="flex gap-2 mt-2">
+                                <div class="flex-none pr-2 font-semibold text-blue-200">👁️-x</div><input type="range" min="-100" max="100"
+                                    value="0" id="eyePosition1" class="range range-sm range-accent slider" />
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="flex-none pr-2 font-semibold text-blue-200">👁️-y</div><input type="range" min="-50" max="50" value="0"
+                                    id="eyePosition2" class="range range-sm range-accent slider" />
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="flex-none pr-2 font-semibold text-blue-200">👁️-z</div><input type="range" min="-300" max="300"
+                                    value="100" id="eyePosition3" class="range range-sm range-accent slider" />
+                            </div>
+                            <div class="flex gap-2 mt-2">
+                                <div class="flex-none pr-2 font-semibold text-blue-200">center-x</div><input type="range" min="-100" max="100"
+                                    value="0" id="centerPosition1" class="range range-sm range-secondary slider" />
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="flex-none pr-2 font-semibold text-blue-200">center-y</div><input type="range" min="-100" max="100"
+                                    value="0" id="centerPosition2" class="range range-sm range-secondary slider" />
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="flex-none pr-2 font-semibold text-blue-200">center-z</div><input type="range" min="-100" max="100"
+                                    value="-100" id="centerPosition3" class="range range-sm range-secondary slider" />
+                            </div>
+                            <div class="flex gap-2 mt-2">
+                                <div class="flex-none pr-2 font-semibold text-blue-200">👆-x</div><input type="range" min="-10" max="10" value="0"
+                                    id="upPosition1" class="range range-sm slider" />
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="flex-none pr-2 font-semibold text-blue-200">👆-y</div><input type="range" min="-10" max="10" value="1"
+                                    id="upPosition2" class="range range-sm slider" />
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="flex-none pr-2 font-semibold text-blue-200">👆-z</div><input type="range" min="-10" max="10" value="0"
+                                    id="upPosition3" class="range range-sm slider" />
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-duck" class="hidden">
+                        <div>
+                            <div class="uppercase mb-2 text-yellow-400 text-md tracking-wider font-bold">chicken controller
+                            </div>
+                            <div class="flex flex-col text-sm gap-2">
+                                <div class="flex gap-2">
+                                    <div class="pr-2 text-blue-200 font-semibold uppercase">head control</div><input id="duckHeadAngle" type="range" min="-45"
+                                        max="45" value="0" class="range range-accent" />
+                                </div>
+                                <div class="flex gap-2">
+                                    <div class="pr-2 text-blue-200 font-semibold uppercase">body control</div><input id="duckBaseAngle" type="range" min="0" max="360"
+                                        value="0" class="range range-accent" />
+                                </div>
+                                <div class="flex gap-2">
+                                    <div class="pr-2 text-blue-200 font-semibold uppercase">wings control</div><input id="duckWingAngle" type="range" min="0" max="45"
+                                        value="0" class="range range-accent" />
+                                </div>
+                            </div>
+                            <img src="https://firstsportz.com/wp-content/uploads/2021/06/Chickens-in-Minecraft-2.jpg" alt="chicken" class="mt-4 rounded h-64">
+                        </div>
+                    </div>
+                    <div id="tab-cat" class="hidden">
+                        <div>
+                            <div class="uppercase mb-2 text-yellow-400 text-md tracking-wider font-bold">cat controller
+                            </div>
+                            <div class="flex flex-col text-sm gap-2">
+                                <div class="flex gap-2">
+                                    <div class="pr-2 text-blue-200 font-semibold uppercase">ears</div><input id="catEarAngle" type="range" min="-45" max="45"
+                                        value="0" class="range range-accent" />
+                                </div>
+                                <div class="flex gap-2 text-blue-200 font-semibold uppercase">
+                                    <div class="pr-2">body</div><input id="baseCatAngle" type="range" min="0" max="360"
+                                        value="0" class="range range-accent" />
+                                </div>
+                                <div class="flex gap-2">
+                                    <div class="pr-2 text-blue-200 font-semibold uppercase">tail</div><input id="catTailAngle" type="range" min="-45" max="45"
+                                        value="0" class="range range-accent" />
+                                </div>
+                            </div>
+                            <img src="https://www.gamereactor.eu/media/84/addyourcute_2628403.png" alt="cat" class="mt-4 rounded h-64">
+                        </div>
+                    </div>
+                    <div id="tab-dog" class="hidden">
+                        <div>
+                            <div class="uppercase mb-2 text-yellow-400 text-md tracking-wider font-bold">dog controller
+                            </div>
+                            <div class="flex flex-col text-sm gap-2">
+                                <div class="flex gap-2">
+                                    <div class="pr-2 text-blue-200 font-semibold uppercase">ears</div><input id="puppyEarAngle" type="range" min="0" max="22"
+                                        value="0" class="range range-accent" />
+                                </div>
+                                <div class="flex gap-2">
+                                    <div class="pr-2 text-blue-200 font-semibold uppercase">body</div><input id="basePuppyAngle" type="range" min="0"
+                                        max="360" value="0" class="range range-accent" />
+                                </div>
+                                <div class="flex gap-2">
+                                    <div class="pr-2 text-blue-200 font-semibold uppercase">tail</div><input id="puppyTailAngle" type="range" min="0" max="45"
+                                        value="0" class="range range-accent" />
+                                </div>
+                            </div>
+                            <img src="https://res.cloudinary.com/teepublic/image/private/s--s0SPu-h6--/t_Resized%20Artwork/c_fit,g_north_west,h_954,w_954/co_ffb81c,e_outline:48/co_ffb81c,e_outline:inner_fill:48/co_ffffff,e_outline:48/co_ffffff,e_outline:inner_fill:48/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1606470441/production/designs/16570347_0.jpg" alt="dog" class="mt-4 rounded h-64">
+                        </div>
+                    </div>
+                    <div id="tab-cubebox" class="hidden">
+                        <div>
+                            <div class="uppercase mb-2 text-yellow-400 text-md tracking-wider font-bold">Cube controller</div>
+                            <div class="flex flex-col text-sm gap-2">
+                                <div class="flex gap-2">
+                                    <div class="pr-2 text-blue-200 font-semibold uppercase">body</div><input id="baseCubeAngle" type="range" min="0" max="360"
+                                        value="0" class="range range-accent" />
+                                </div>
+                            </div>
+                            <img src="https://ksr-ugc.imgix.net/assets/025/669/826/1f1b8af44a8cfc0333850f165db376ba_original.jpg?ixlib=rb-4.0.2&crop=faces&w=1552&h=873&fit=crop&v=1561998909&auto=format&frame=1&q=92&s=487482ae1f86270d1803ffc0bb137036" alt="cube" class="mt-4 rounded h-32">
+                            <div class="uppercase mb-2 text-yellow-400 text-md tracking-wider font-bold mt-4">Cuboid controller</div>
+                            <div class="flex flex-col text-sm gap-2">
+                                <div class="flex gap-2">
+                                    <div class="pr-2 text-blue-200 font-semibold uppercase">body</div><input id="baseBoxAngle" type="range" min="0" max="360"
+                                        value="0" class="range range-accent" />
+                                </div>
+                            </div>
+                            <img src="https://imgaz2.staticbg.com/thumb/large/upload/2015/07/SKU248294_2.jpg" alt="cuboid" class="mt-4 rounded h-32">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+        <div hidden>
+            <h2>Arm Material</h2>
+            <div>
+                <select class="form-control form-control-sm" id="arm-material">
+                    <option value="none">None</option>
+                    <option value="brass">Brass</option>
+                    <option value="chrome">Chrome</option>
+                    <option value="bronze">Bronze</option>
+                </select>
+            </div>
+            <h2>Camera Material</h2>
+            <div>
+                <select class="form-control form-control-sm" id="camera-material">
+                    <option value="none">None</option>
+                    <option value="brass">Brass</option>
+                    <option value="chrome">Chrome</option>
+                    <option value="bronze">Bronze</option>
+                </select>
+            </div>
+            <h2>Room Material</h2>
+            <div>
+                <select class="form-control form-control-sm" id="room-material">
+                    <option value="none">None</option>
+                    <option value="brass">Brass</option>
+                    <option value="chrome">Chrome</option>
+                    <option value="bronze">Bronze</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
