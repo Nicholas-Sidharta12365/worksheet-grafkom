@@ -552,7 +552,13 @@ var catTailNode; var shutterCameraTranslation2 = 0.45; var shutterCameraDirectio
 var catBeakNode;
 
 var baseCubeNode; var baseCubeAngle = 0;
-var baseBoxNode; var baseBoxAngle = 0;
+
+var baseChairNode; var baseChairAngle = 0;
+var firstChairLegNode; var firstChairLegAngle = 0;
+var secondChairLegNode; var secondChairLegAngle = 0;
+var thirdChairLegNode; var thirdChairLegAngle = 0;
+var fourthChairLegNode; var fourthChairLegAngle = 0;
+
 
 function drawLightSource(shadow) {
     mvPushMatrix();
@@ -626,7 +632,12 @@ function initObjectTree() {
     thirdCatLegNode.child = fourthCatLegNode;
 
     baseCatNode.sibling = baseCubeNode;
-    baseCubeNode.sibling = baseBoxNode;
+
+    baseCubeNode.sibling = baseChairNode;
+    baseChairNode.child = firstChairLegNode;
+    firstChairLegNode.sibling = secondChairLegNode;
+    secondChairLegNode.sibling = thirdChairLegNode;
+    thirdChairLegNode.sibling = fourthChairLegNode;
 }
 
 function traverse(node, shadow) {
@@ -1051,8 +1062,8 @@ function animate() {
         baseCubeAngle = (baseCubeAngle + update) % (Math.PI);
         $("#baseCubeAngle").val(baseCubeAngle * 180 / (Math.PI));
 
-        baseBoxAngle = (baseBoxAngle + update) % (2 * Math.PI);
-        $("#baseBoxAngle").val(baseBoxAngle * 90 / (Math.PI));
+        baseChairAngle= (baseChairAngle + update) % (2 * Math.PI);
+        $("#baseBoxAngle").val(baseChairAngle * 90 / (Math.PI));
 
     }
     initObjectTree();
