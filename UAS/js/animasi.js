@@ -592,7 +592,7 @@ function initObjectTree() {
 
     initDuckTree()
     initPuppyTree()
-    initCatTree()
+    initCapyTree()
     initCubeBoxTree()
 
     duckBaseNode.child = duckHeadNode;
@@ -624,8 +624,6 @@ function initObjectTree() {
     firstCatLegNode.child = secondCatLegNode;
     secondCatLegNode.child = thirdCatLegNode;
     thirdCatLegNode.child = fourthCatLegNode;
-    firstCatLegNode.sibling = catTailNode;
-    catTailNode.sibling = catBeakNode;
 
     baseCatNode.sibling = baseCubeNode;
     baseCubeNode.sibling = baseBoxNode;
